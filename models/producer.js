@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const ProducerSchema = new Schema({
   brandname: { type: String, required: true },
   country: { type: String },
-  telephonenumber: { type: String },
+  contact: { type: String },
 });
 
 module.exports = mongoose.model("Producer", ProducerSchema);

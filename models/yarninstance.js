@@ -8,6 +8,6 @@ const YarnInstanceSchema = new Schema({
   stock: { type: Number, required: true, min: 0 },
 });
 
-// not sure if colorwayid should be unique
+// not sure if colorwayid should be unique. check on create
 
 module.exports = mongoose.model("YarnInstance", YarnInstanceSchema);
