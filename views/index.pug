@@ -2,4 +2,7 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title}
+  - var stock = 0
+  each instance in data.yarn_instances_list
+    - stock += instance.stock
+  p There are #{data.yarn_count} yarn types in inventory and #{stock} total units available.

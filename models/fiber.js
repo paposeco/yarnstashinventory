@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-
 const Schema = mongoose.Schema;
 
 const FiberSchema = new Schema({
@@ -29,6 +28,10 @@ const FiberSchema = new Schema({
     ],
     default: "Wool",
   },
+});
+
+FiberSchema.virtual("url").get(function() {
+  return `/inventory/fiber/${this._id}`;
 });
 
 module.exports = mongoose.model("Fiber", FiberSchema);
