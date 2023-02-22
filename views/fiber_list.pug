@@ -3,8 +3,10 @@ extends layout
 block content
   h1= title
   ul
-  each element in fiber_list
-    li
-      a(href=element.url) #{element.fibertype}
-  else
-    li There are no fibers.
+    each element in fiber_list
+      li
+        a(href=element.url) #{element.fibertype}
+    else
+      li There are no fibers.
+
+  button Add Fiber

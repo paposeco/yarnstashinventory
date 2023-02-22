@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  h1= title
+
+  ul
+    each producer in producers_list
+      if producer.contact
+        li
+          a(href=producer.url) #{producer.brandname}
+          |   Contact: #{producer.contact}
+      else
+        li
+          a(href=producer.url) #{producer.brandname}
+
+  button Add Producer

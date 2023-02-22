@@ -1,5 +1,7 @@
 const Yarn = require("../models/yarn");
 const YarnInstance = require("../models/yarninstance");
+const Producer = require("../models/producer");
+const Weight = require("../models/weight");
 const async = require("async");
 
 exports.index = (req, res) => {
@@ -23,4 +25,36 @@ exports.index = (req, res) => {
       });
     }
   );
+};
+
+exports.yarn_list = (req, res, next) => {
+  Yarn.find()
+    .populate("producer")
+    .populate("weight")
+    .sort({ weight: 1 })
+    .exec(function(err, list_yarn) {
+      if (err) {
+        return next(err);
+      }
+      res.render("yarn_list", {
+        title: "Yarn List",
+        yarnlist: list_yarn,
+      });
+    });
+};
+
+exports.yarn_detail = (req, res, next) => {
+  Yarn.findById(req.params.id)
+    .populate("producer")
+    .populate("weight")
+    .populate("fibercomposition.fibertype")
+    .exec((err, yarndetail) => {
+      if (err) {
+        return next(err);
+      }
+      res.render("yarn_detail", {
+        title: "Yarn",
+        yarn_info: yarndetail,
+      });
+    });
 };

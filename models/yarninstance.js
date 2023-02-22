@@ -8,6 +8,10 @@ const YarnInstanceSchema = new Schema({
   stock: { type: Number, required: true, min: 0 },
 });
 
+YarnInstanceSchema.virtual("url").get(function() {
+  return `/inventory/yarncolorway/${this._id}`;
+});
+
 // not sure if colorwayid should be unique. check on create
 
 module.exports = mongoose.model("YarnInstance", YarnInstanceSchema);

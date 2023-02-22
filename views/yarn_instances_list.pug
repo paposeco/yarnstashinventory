@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  h1= title
+
+  ul
+    each instance in instances
+      li
+        a(href=instance.yarn.url) #{instance.yarn.name}
+        |  Colorway: 
+        a(href=instance.url) #{instance.colorwayid}
+        |  Stock: #{instance.stock}
+
+
+  button Add Yarn Colorway

@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  h1= title
+  ul
+    each weight in weight_list
+      li
+        a(href=weight.url) #{weight.weight}
+    else
+      li There are no yarn weights. 
+
+  button Add Yarn Weight

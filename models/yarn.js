@@ -20,4 +20,8 @@ const YarnSchema = new Schema({
   },
 });
 
+YarnSchema.virtual("url").get(function() {
+  return `/inventory/yarn/${this._id}`;
+});
+
 module.exports = mongoose.model("Yarn", YarnSchema);

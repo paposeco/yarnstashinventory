@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  h1= title
+
+  p Name: #{producer_info.brandname}
+  if producer_info.country
+    p Country: #{producer_info.country}
+
+  if producer_info.contact
+    p Contact: #{producer_info.contact}
+
+  button Delete
+
+  button Edit 

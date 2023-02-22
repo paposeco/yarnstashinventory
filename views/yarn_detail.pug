@@ -1,0 +1,24 @@
+extends layout
+
+block content
+
+  h1= title
+
+  h2 #{yarn_info.producer.brandname} #{yarn_info.name}
+
+  p Weight: #{yarn_info.weight.weight}
+
+  - var composition = "";
+      each composition_detail in yarn_info.fibercomposition
+        console.log(composition_detail)
+        - composition += composition_detail.percentage +"% "+ composition_detail.fibertype.fibertype + " "
+
+  p Composition: #{composition}
+  p Unit weight: #{yarn_info.unitweight}g
+  p Meterage: #{yarn_info.meterage}m
+  if yarn_info.price
+    p Unit price: #{yarn_info.price} eur
+
+  button Edit
+  button Delete
+  button Add Yarn Colorway 

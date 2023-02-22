@@ -7,4 +7,8 @@ const ProducerSchema = new Schema({
   contact: { type: String },
 });
 
+ProducerSchema.virtual("url").get(function() {
+  return `/inventory/producers/${this._id}`;
+});
+
 module.exports = mongoose.model("Producer", ProducerSchema);

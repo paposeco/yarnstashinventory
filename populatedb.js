@@ -126,10 +126,10 @@ function yarnInstanceCreate(yarn, dyelot, colorwayid, stock, cb) {
 }
 
 function createProducer(cb) {
-  async.parallel(
+  async.series(
     [
       function (callback) {
-        producerCreate("Drops", "Norway", "+4723303220", callback);
+        producerCreate("DROPS", "Norway", "+4723303220", callback);
       },
       function (callback) {
         producerCreate(
@@ -204,11 +204,11 @@ function createWeightFiber(cb) {
 }
 
 function createYarn(cb) {
-  async.parallel(
+  async.series(
     [
       function (callback) {
         yarnCreate(
-          "Garnstudio DROPS Merino Extra Fine",
+          "Merino Extra Fine",
           weights[2],
           [{ fibertype: fibers[3], percentage: 100 }],
           50,

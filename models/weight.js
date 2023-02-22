@@ -10,4 +10,8 @@ const WeightSchema = new Schema({
   },
 });
 
+WeightSchema.virtual("url").get(function() {
+  return `/inventory/weight/${this._id}`;
+});
+
 module.exports = mongoose.model("Weight", WeightSchema);
