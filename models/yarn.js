@@ -25,3 +25,8 @@ YarnSchema.virtual("url").get(function() {
 });
 
 module.exports = mongoose.model("Yarn", YarnSchema);
+
+//implement:
+// on yarn detail, provide link to available colorways
+// on yarn by colorway, title with name of name and then total stock for each colorway, even if from different dye lots
+//then on yarn instance detail, show individual dyelots and stock of each

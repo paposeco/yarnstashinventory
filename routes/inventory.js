@@ -20,9 +20,7 @@ router.get("/yarn", yarn_controller.yarn_list);
 router.get("/fiber/:id", fiber_controller.fiber_detail);
 router.get("/weight/:id", weight_controller.weight_detail);
 router.get("/producers/:id", producer_controller.producer_detail);
-
-/* router.get("/yarncolorways/:id", yarn_instance_controller.instance_detail); */
-
+router.get("/yarncolorway/:id", yarn_instance_controller.instance_detail);
 router.get("/yarn/:id", yarn_controller.yarn_detail);
 
 module.exports = router;

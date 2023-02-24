@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  h1= title
+  p #{producerdetails.brandname} #{yarninstance.yarn.name}
+  p Colorway: #{yarninstance.colorwayid}
+  p Dyelot: #{yarninstance.dyelot}
+  p Stock: #{yarninstance.stock}
+
+  button Edit
+  button Delete
