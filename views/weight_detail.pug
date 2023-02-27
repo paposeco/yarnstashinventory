@@ -2,8 +2,16 @@ extends layout
 
 block content
 
-  h1= title
+  h1 #{title} #{weight_info.weight}
 
-  p Name: #{weight_info.weight}
+  if (yarninfo.length > 0)
+    p Yarn in this weight:
+    ul
+      each yarn in yarninfo
+        li
+          a(href=yarn.url) #{yarn.producer.brandname} #{yarn.name}
+
+  else
+    p There is no yarn available with this weight. 
 
   button Delete

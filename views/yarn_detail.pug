@@ -10,7 +10,6 @@ block content
 
   - var composition = "";
       each composition_detail in yarn_info.fibercomposition
-        console.log(composition_detail)
         - composition += composition_detail.percentage +"% "+ composition_detail.fibertype.fibertype + " "
 
   p Composition: #{composition}
@@ -19,6 +18,20 @@ block content
   if yarn_info.price
     p Unit price: #{yarn_info.price} eur
 
-  button Edit
-  button Delete
-  button Add Yarn Colorway 
+  h2 Available Colorways
+
+  if(!yarncolorways)
+    p There are no available colorways for this yarn.
+  else
+    ul
+      each colorway in yarncolorways
+        li
+          a(href=colorway.url) #{colorway.colorwayid}
+          |
+          | (Dyelot: #{colorway.dyelot}, Stock: #{colorway.stock})
+
+
+  div 
+    button Edit
+    button Delete
+    button Add Yarn Colorway 

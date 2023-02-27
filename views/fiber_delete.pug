@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  h1  #{title} #{fiber.fibertype}
+  if (yarn.length > 0)
+    p Before deleting this fiber, you need to delete the following yarn:
+    ul
+      each yarnelement in yarn
+        li
+          a(href=yarnelement.url) #{yarnelement.name}
+
+  else
+    p Are you want to delete #{fiber.fibertype} ?
+
+    form(method="POST" action="")
+      input#fiberid(type=hidden, name="fiberid", required="true", value=fiber._id)
+      button(type="submit") Delete

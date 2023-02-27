@@ -2,8 +2,27 @@ extends layout
 
 block content
 
-  h1= title
+  h1 #{title} #{fiber_info.fibertype}
 
-  p Name: #{fiber_info.fibertype}
+  if(yarn.length > 0)
+     p Yarn with this fiber type:
+     ul
+       each yarnelement in yarn
+         - var fibercomp = "";
+            each fiberelement in yarnelement.fibercomposition
+               if (fiberelement === yarnelement.fibercomposition[yarnelement.fibercomposition.length-1])
+                 - fibercomp += fiberelement.percentage + "% " + fiberelement.fibertype.fibertype
+               else
+                 - fibercomp += fiberelement.percentage + "% " + fiberelement.fibertype.fibertype +", "
 
-  button Delete
+         li
+           a(href=yarnelement.url) #{yarnelement.producer.brandname} #{yarnelement.name}
+           |
+           |#{fibercomp}
+  else
+    p There is no yarn available with this fiber type.
+
+  p
+    a(href=fiber_info.url+"/delete") Delete
+
+

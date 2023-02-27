@@ -44,17 +44,40 @@ exports.yarn_list = (req, res, next) => {
 };
 
 exports.yarn_detail = (req, res, next) => {
-  Yarn.findById(req.params.id)
-    .populate("producer")
-    .populate("weight")
-    .populate("fibercomposition.fibertype")
-    .exec((err, yarndetail) => {
+  async.series(
+    [
+      function(callback) {
+        Yarn.findById(req.params.id)
+          .populate("producer")
+          .populate("weight")
+          .populate("fibercomposition.fibertype")
+          .exec((err, queryresult) => {
+            if (err) {
+              next(err);
+            }
+            callback(null, queryresult);
+          });
+      },
+      function(callback) {
+        YarnInstance.find({ yarn: req.params.id }).exec(
+          (err, yarninstancesquery) => {
+            if (err) {
+              return next(err);
+            }
+            callback(null, yarninstancesquery);
+          }
+        );
+      },
+    ],
+    function(err, results) {
       if (err) {
         return next(err);
       }
       res.render("yarn_detail", {
         title: "Yarn",
-        yarn_info: yarndetail,
+        yarn_info: results[0],
+        yarncolorways: results[1],
       });
-    });
+    }
+  );
 };

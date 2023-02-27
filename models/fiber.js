@@ -26,7 +26,6 @@ const FiberSchema = new Schema({
       "Merino",
       "Other",
     ],
-    default: "Wool",
   },
 });
 

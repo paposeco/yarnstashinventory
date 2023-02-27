@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  h1= title
+
+  form(method="POST" action="")
+    select#createfiber(required="true" name="createfiber")
+       each fiber in fiberstocreate
+          option(value=fiber) #{fiber}
+    button(type="submit") Create 
+ 
+  p If you don't see a fiber on the drop down menu, it's because the fiber has already been created. Check the existing fibers at
+     |
+     |
+     a(href='/inventory/fiber') Yarn By Fiber
