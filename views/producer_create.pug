@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  h1= title
+
+  if(errors)
+    p #{errors.msg}
+  form(method="POST" action="")
+    label(for="brandname") Brand name:
+    input#brandname(type="text" required=true name="brandname")
+    label(for="country") Country:
+    select#country(name="country")
+      each country in countries
+        option(value=country) #{country}
+    label(for="contact") Contact:
+    input#contact(type="text" name="contact")
+
+    button(type="submit") Create

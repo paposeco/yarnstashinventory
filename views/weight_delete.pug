@@ -1,17 +1,17 @@
 extends layout
 
 block content
-  h1  #{title} #{fiber.fibertype}
+  h1  #{title} #{weight.weight}
   if (yarn.length > 0)
-    p Before deleting this fiber, you need to delete the following yarn:
+    p Before deleting this weight, you need to delete the following yarn:
     ul
       each yarnelement in yarn
         li
           a(href=yarnelement.url) #{yarnelement.producer.brandname} #{yarnelement.name}
 
   else
-    p Are you sure want to delete #{fiber.fibertype}?
+    p Are you sure want to delete #{weight.weight} ?
 
     form(method="POST" action="")
-      input#fiberid(type="hidden", name="fiberid", required="true", value=fiber._id)
+      input#weightid(type="hidden", name="weightid", required="true", value=weight._id)
       button(type="submit") Delete

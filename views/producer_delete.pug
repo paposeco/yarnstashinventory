@@ -1,0 +1,20 @@
+extends layout
+
+block content
+  h1 #{title} #{producer.brandname}
+
+  if(yarnlist.length > 0)
+    p Before deleting this producer, you need to delete the following yarn:
+    ul
+      each yarn in yarnlist
+        li
+          a(href=yarn.url) #{producer.brandname}
+          |
+          |#{yarn.name}
+
+  else
+    p Are you sure you want to delete #{producer.brandname}?
+
+    form(method="POST" action="")
+      input#producerid(type="hidden" required="true" name="producerid" value=producer._id)
+      button(type="submit") Delete

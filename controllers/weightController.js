@@ -1,6 +1,7 @@
 const Weight = require("../models/weight");
 const Yarn = require("../models/yarn");
 const async = require("async");
+const { body, validationResult } = require("express-validator");
 
 exports.weight_list = (req, res, next) => {
   Weight.find().exec(function(err, list_weights) {
@@ -34,6 +35,129 @@ exports.weight_detail = (req, res, next) => {
         title: "Weight: ",
         weight_info: results.findweight,
         yarninfo: results.findyarn,
+      });
+    }
+  );
+};
+
+exports.weight_create_get = (req, res, next) => {
+  const allowedWeight = Weight.schema.path("weight").enumValues;
+  Weight.find().exec((err, results) => {
+    if (err) {
+      return next(err);
+    }
+    let missingweights = [];
+    for (let i = 0; i < allowedWeight.length; i++) {
+      // look for this weight in results
+      let stored = false;
+      for (let j = 0; j < results.length; j++) {
+        if (results[j].weight === allowedWeight[i]) {
+          stored = true;
+          break;
+        }
+      }
+      if (stored) {
+        continue;
+      } else {
+        missingweights.push(allowedWeight[i]);
+      }
+    }
+
+    res.render("weight_create", {
+      title: "Create Weight",
+      weightstocreate: missingweights,
+    });
+  });
+};
+
+exports.weight_create_post = [
+  body("createweight").escape(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    const newweight = new Weight({ weight: req.body.createweight });
+
+    if (!errors.isEmpty()) {
+      res.render("weight_create", {
+        title: "Create Weight",
+        errorspresent: errors,
+      });
+      return;
+    }
+    Weight.find({ weight: req.body.createweight }).exec((err, weightexists) => {
+      if (err) {
+        return next(err);
+      }
+      if (weightexists.length > 0) {
+        res.redirect(weightexists.url);
+      } else {
+        newweight.save((err) => {
+          if (err) {
+            return next(err);
+          }
+          res.redirect(newweight.url);
+        });
+      }
+    });
+  },
+];
+
+exports.weight_delete_get = (req, res, next) => {
+  async.parallel(
+    {
+      findweight(callback) {
+        Weight.findById(req.params.id).exec(callback);
+      },
+      findyarn(callback) {
+        Yarn.find({ weight: req.params.id })
+          .populate("producer")
+          .exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      if (results.findweight === null) {
+        res.redirect("/inventory/weight");
+        return;
+      }
+      res.render("weight_delete", {
+        title: "Delete: ",
+        weight: results.findweight,
+        yarn: results.findyarn,
+      });
+    }
+  );
+};
+
+exports.weight_delete_post = (req, res, next) => {
+  async.parallel(
+    {
+      weightexists(callback) {
+        Weight.findById(req.params.id).exec(callback);
+      },
+      yarnwiththisweight(callback) {
+        Yarn.find({ weight: req.params.id }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      if (results.weightexists.length > 0) {
+        res.render("weight_delete", {
+          title: "Delete: ",
+          weight: results.weightexists,
+          yarn: results.yarnwiththisweight,
+        });
+        return;
+      }
+      // no yarn has this weight
+      Weight.findByIdAndRemove(req.params.id, (err) => {
+        if (err) {
+          return next(err);
+        }
+        res.redirect("/inventory/weight");
       });
     }
   );

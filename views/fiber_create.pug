@@ -3,6 +3,8 @@ extends layout
 block content
   h1= title
 
+  if(errorspresent)
+    p #{errorspresent.msg}
   form(method="POST" action="")
     select#createfiber(required="true" name="createfiber")
        each fiber in fiberstocreate

@@ -62,6 +62,7 @@ exports.fiber_delete_get = (req, res, next) => {
       }
       if (results.fiberexists === null) {
         res.redirect("/inventory/fiber");
+        return;
       }
       res.render("fiber_delete", {
         title: "Delete: ",
@@ -94,6 +95,7 @@ exports.fiber_delete_post = (req, res, next) => {
           fiber: results.fiberexists,
           yarn: results.yarnwiththisfiber,
         });
+        return;
       }
       // no yarn has this fiber type
       Fiber.findByIdAndRemove(req.params.id, (err) => {

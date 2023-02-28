@@ -18,18 +18,25 @@ router.get("/yarn", yarn_controller.yarn_list);
 // if this goes after details, the controller chooses the /:id functions
 router.get("/fiber/create", fiber_controller.fiber_create_get);
 router.post("/fiber/create", fiber_controller.fiber_create_post);
+router.get("/weight/create", weight_controller.weight_create_get);
+router.post("/weight/create", weight_controller.weight_create_post);
+router.get("/producers/create", producer_controller.producer_create_get);
+router.post("/producers/create", producer_controller.producer_create_post);
+
+// delete
+
+router.get("/fiber/:id/delete", fiber_controller.fiber_delete_get);
+router.post("/fiber/:id/delete", fiber_controller.fiber_delete_post);
+router.get("/weight/:id/delete", weight_controller.weight_delete_get);
+router.post("/weight/:id/delete", weight_controller.weight_delete_post);
+router.get("/producers/:id/delete", producer_controller.producer_delete_get);
+router.post("/producers/:id/delete", producer_controller.producer_delete_post);
 
 // details
-
 router.get("/fiber/:id", fiber_controller.fiber_detail);
 router.get("/weight/:id", weight_controller.weight_detail);
 router.get("/producers/:id", producer_controller.producer_detail);
 router.get("/yarncolorway/:id", yarn_instance_controller.instance_detail);
 router.get("/yarn/:id", yarn_controller.yarn_detail);
-
-// delete
-
-router.get("/fiber/:id/delete", fiber_controller.fiber_delete_get);
-router.post("fiber/:id/delete", fiber_controller.fiber_delete_post);
 
 module.exports = router;
