@@ -109,6 +109,7 @@ exports.producer_create_post = [
       res.render("producer_create", {
         title: "Add new producer",
         countries: countryList.getNames(),
+        currproducer: req.body,
         errors: errors.array(),
       });
       return;

@@ -1,0 +1,35 @@
+extends layout
+
+block content
+  h1= title
+
+  form(method="POST" action="")
+    label(for="yarnname") Yarn name:
+    input#yarnname(type="text" required="true" name="yarnname" value=(undefined === yarn ? "" : yarn.name))
+    label(for="weight") Yarn weight:
+    select#weight(required="true" name="weight")
+      each weight in weights
+        option(value=weight._id)  #{weight.weight}
+    p Yarn fiber composition:
+    input#numberfibersinput(type="hidden" value=numberfibers name="numberfibersinput")
+    - for(let i =0; i < numberfibers; i++)
+      div(id="fiberdiv"+i)
+        input(id='fiberperc'+i type='number' name='fiberperc'+i required=true min="1" max="100")
+        label(for="fiberperc"+i) %
+        select(id="fibertype"+i required="true" name="fibertype"+i)
+          each fiber in fibers
+            option(value=fiber._id) #{fiber.fibertype}
+    label(for="unitweight") Weight per unit (grams):
+    input#unitweight(type="number" required="true" min="1" max="2000" name="unitweight" value=(undefined === yarn ? "": yarn.unitweight))
+
+    label(for="meterage") Meters per unit:
+    input#meterage(type="number" required="true" min="1" name='meterage' max="2000" value=(undefined === yarn ? "" : yarn.meterage))
+
+    label(for="price") Price per unit:
+    input#price(type="type" required="true" minLength="1" pattern="\d+\.?\d*" name="price" value=(undefined === yarn ? "" : yarn.price.toString()))
+
+    label(for="producer") Producer:
+    select#producer(required="true" name="producer")
+      each producer in producers
+        option(value=producer._id) #{producer.brandname}
+    button(type="submit") Add yarn

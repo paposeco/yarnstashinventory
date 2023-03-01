@@ -1,0 +1,28 @@
+extends layout
+
+block content
+  h1 Yarn: #{yarninfo.producer.brandname} #{yarninfo.name}
+  h2= title
+
+    if(errors)
+      p= errors
+
+    form(method="POST" action="")
+      label(for="dyelot") Dyelot:
+      input#dyelot(type="string" name="dyelot" required="true" value=(undefined===curryarninstance ? "" : curryarninstance.dyelot))
+      label(for="colorway") Colorway:
+      input#colorway(type="string" name="colorway" required="true" value=(undefined===curryarninstance ? "" : curryarninstance.colorway))
+      label(for="stock") Stock:
+      input#stock(type="number" name="stock" required="true" min="0" max="999" value=(undefined===curryarninstance ? "" : curryarninstance.stock))
+      button(type="submit") Save
+
+  if(yarninstances.length > 0)
+    p Available colorways and dyelots for this yarn:
+    ul
+      each yarninstance in yarninstances
+        li
+          a(href=yarninstance.url) Colorway: #{yarninstance.colorwayid}
+          |
+          | , Dyelot: #{yarninstance.dyelot}, Stock: #{yarninstance.stock}
+  else
+    p There are currently no available colorways for this yarn.

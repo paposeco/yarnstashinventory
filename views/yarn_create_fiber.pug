@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  h1=title
+
+  p Select number of fibers on yarn:
+  form(method="POST" action="")
+    label(for="numberFibers")
+    input#numberFibers(type="number" min='1' required="true" name="numberFibers" placeholder="1")
+    button(type="submit") Select

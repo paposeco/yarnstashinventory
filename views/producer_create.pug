@@ -7,12 +7,12 @@ block content
     p #{errors.msg}
   form(method="POST" action="")
     label(for="brandname") Brand name:
-    input#brandname(type="text" required=true name="brandname")
+    input#brandname(type="text" required=true name="brandname" value=(undefined === currproducer ? "" : currproducer.brandname))
     label(for="country") Country:
     select#country(name="country")
       each country in countries
         option(value=country) #{country}
     label(for="contact") Contact:
-    input#contact(type="text" name="contact")
+    input#contact(type="text" name="contact" value=(undefined === currproducer ? "" : currproducer.contact))
 
     button(type="submit") Create

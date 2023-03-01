@@ -22,6 +22,20 @@ router.get("/weight/create", weight_controller.weight_create_get);
 router.post("/weight/create", weight_controller.weight_create_post);
 router.get("/producers/create", producer_controller.producer_create_get);
 router.post("/producers/create", producer_controller.producer_create_post);
+router.get(
+  "/yarncolorway/create/:yarnid",
+  yarn_instance_controller.create_instance_get
+);
+
+router.post(
+  "/yarncolorway/create/:yarnid",
+  yarn_instance_controller.create_instance_post
+);
+router.get("/yarn/create/:numberfibers", yarn_controller.yarn_create_get);
+router.post("/yarn/create/:numberfibers", yarn_controller.yarn_create_post);
+
+router.get("/yarn/selectfibers", yarn_controller.yarn_create_fiber_input_get);
+router.post("/yarn/selectfibers", yarn_controller.yarn_create_fiber_input_post);
 
 // delete
 
@@ -31,6 +45,8 @@ router.get("/weight/:id/delete", weight_controller.weight_delete_get);
 router.post("/weight/:id/delete", weight_controller.weight_delete_post);
 router.get("/producers/:id/delete", producer_controller.producer_delete_get);
 router.post("/producers/:id/delete", producer_controller.producer_delete_post);
+router.get("/yarncolorway/:id/delete", yarn_instance_controller.delete_get);
+router.post("/yarncolorway/:id/delete", yarn_instance_controller.delete_post);
 
 // details
 router.get("/fiber/:id", fiber_controller.fiber_detail);
