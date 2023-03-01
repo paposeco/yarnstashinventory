@@ -47,6 +47,8 @@ router.get("/producers/:id/delete", producer_controller.producer_delete_get);
 router.post("/producers/:id/delete", producer_controller.producer_delete_post);
 router.get("/yarncolorway/:id/delete", yarn_instance_controller.delete_get);
 router.post("/yarncolorway/:id/delete", yarn_instance_controller.delete_post);
+router.get("/yarn/:id/delete", yarn_controller.yarn_delete_get);
+router.post("/yarn/:id/delete", yarn_controller.yarn_delete_post);
 
 // details
 router.get("/fiber/:id", fiber_controller.fiber_detail);

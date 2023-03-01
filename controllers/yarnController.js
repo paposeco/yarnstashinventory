@@ -83,6 +83,72 @@ exports.yarn_detail = (req, res, next) => {
   );
 };
 
+exports.yarn_delete_get = (req, res, next) => {
+  async.parallel(
+    {
+      findyarn(callback) {
+        Yarn.findById(req.params.id)
+          .populate("producer")
+          .populate("fibercomposition.fibertype")
+          .populate("weight")
+          .exec(callback);
+      },
+      findinstances(callback) {
+        YarnInstance.find({ yarn: req.params.id }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      if (results.findyarn === null) {
+        res.redirect("/inventory/null");
+      }
+      res.render("yarn_delete", {
+        title: "Delete: ",
+        yarn_info: results.findyarn,
+        yarncolorways: results.findinstances,
+      });
+    }
+  );
+};
+
+exports.yarn_delete_post = (req, res, next) => {
+  async.parallel(
+    {
+      findyarn(callback) {
+        Yarn.findById(req.body.yarnid)
+          .populate("producer")
+          .populate("fibercomposition.fibertype")
+          .populate("weight")
+          .exec(callback);
+      },
+      findinstances(callback) {
+        YarnInstance.find({ yarn: req.body.yarnid }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      if (results.findinstances.length > 0) {
+        res.render("yarn_delete", {
+          title: "Delete: ",
+          yarn_info: results.findyarn,
+          yarncolorways: results.findinstances,
+        });
+        return;
+      }
+      Yarn.findByIdAndRemove(req.body.yarnid, (err) => {
+        if (err) {
+          return next(err);
+        }
+        res.redirect("/inventory/yarn");
+      });
+    }
+  );
+};
+
 exports.yarn_create_fiber_input_get = (req, res, next) => {
   res.render("yarn_create_fiber", {
     title: "Add yarn",

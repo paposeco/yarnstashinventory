@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  h1 #{title} #{yarn_info.producer.brandname} #{yarn_info.name}
+
+  if (yarncolorways.length > 0)
+    p You need to delete the following colorways and dyelots, before deleting #{yarn_info.name}:
+    ul
+      each yarn in yarncolorways
+        li
+          a(href=yarn.url) #{yarn.colorwayid}
+  else
+    p Are you sure you want to delete #{yarn_info.name}?
+    form(method="POST" action="")
+      input#yarnid(name="yarnid" value=yarn_info._id type="hidden")
+      button(type="submit") Delete
+
