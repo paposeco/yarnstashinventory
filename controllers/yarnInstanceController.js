@@ -5,6 +5,7 @@ const async = require("async");
 const { body, validationResult } = require("express-validator");
 
 exports.instance_detail = (req, res, next) => {
+  // turns out, you can populate a populated field. I'm leaving this here to remember where I began.
   async.waterfall(
     [
       function(callback) {
@@ -178,6 +179,118 @@ exports.create_instance_post = [
           }
           res.redirect(newyarninstance.url);
         });
+      }
+    );
+  },
+];
+
+exports.update_get = (req, res, next) => {
+  async.parallel(
+    {
+      // if I only the yarn information on the instance, I won't have access to the producer info
+      findyarninstances(callback) {
+        YarnInstance.find({ yarn: req.params.yarnid }, null, {
+          sort: { colorwayid: 1 },
+        }).exec(callback);
+      },
+      yarninstance(callback) {
+        YarnInstance.findById(req.params.yarnid)
+          .populate({ path: "yarn", populate: { path: "producer" } })
+          .exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      if (results.yarninstance === null) {
+        const err = new Error("Yarn colorway or dyelot not found");
+        err.status = 404;
+        return next(err);
+      }
+      res.render("yarn_instance_create", {
+        title: "Edit yarn colorway or dyelot",
+        yarninfo: results.yarninstance.yarn,
+        yarninstances: results.findyarninstances,
+        curryarninstance: results.yarninstance,
+      });
+    }
+  );
+};
+
+exports.update_post = [
+  body("dyelot")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("Dyelot is required.")
+    .isAlphanumeric()
+    .withMessage("Dyelot must be letters and/or numbers."),
+  body("colorway")
+    .trim()
+    .isLength({ min: 1 })
+    .withMessage("Colorway id is required")
+    .isAlphanumeric()
+    .withMessage("Colorway id must be letters and/or numbers."),
+  body("stock")
+    .trim()
+    .isLength({ min: 1, max: 3 })
+    .escape()
+    .withMessage("Stock is required")
+    .isNumeric({ no_symbols: true })
+    .withMessage("Only integers are allowed"),
+
+  (req, res, next) => {
+    const errors = validationResult(req);
+
+    async.parallel(
+      {
+        findyarninstance(callback) {
+          YarnInstance.findById(req.params.yarnid)
+            .populate({ path: "yarn", populate: { path: "producer" } })
+            .exec(callback);
+        },
+        findinstances(callback) {
+          YarnInstance.find({ yarn: req.params.yarnid }, null, {
+            sort: { colorwayid: 1 },
+          }).exec(callback);
+        },
+      },
+      (err, results) => {
+        if (!errors.isEmpty()) {
+          res.render("yarn_instance_create", {
+            title: "Edit colorway or dyelot",
+            curryarninstance: req.body,
+            yarninfo: results.findyarninstance.yarn,
+            yarninstances: results.findinstances,
+            errors: errors.array(),
+          });
+          return;
+        }
+        if (err) {
+          return next(err);
+        }
+        if (results.findyarninstance === null) {
+          res.redirect("/inventory/yarn");
+        }
+        const updatedyarninstance = new YarnInstance({
+          yarn: results.findyarninstance.yarn,
+          dyelot: req.body.dyelot,
+          colorwayid: req.body.colorway,
+          stock: req.body.stock,
+          _id: req.params.yarnid,
+        });
+        YarnInstance.findByIdAndUpdate(
+          req.params.yarnid,
+          updatedyarninstance,
+          {},
+          (err, theinstance) => {
+            if (err) {
+              return next(err);
+            }
+            res.redirect(updatedyarninstance.url);
+          }
+        );
       }
     );
   },

@@ -3,22 +3,31 @@ extends layout
 block content
   h1= title
 
+  if(errors)
+    p Error: #{errors}
+
   form(method="POST" action="")
     label(for="yarnname") Yarn name:
     input#yarnname(type="text" required="true" name="yarnname" value=(undefined === yarn ? "" : yarn.name))
     label(for="weight") Yarn weight:
     select#weight(required="true" name="weight")
       each weight in weights
-        option(value=weight._id)  #{weight.weight}
+        if(yarn === undefined)
+          option(value=weight._id)  #{weight.weight}
+        else
+          option(value=weight._id selected=(yarn.weight._id.toString() === weight._id.toString() ? "selected" : false))  #{weight.weight}
     p Yarn fiber composition:
     input#numberfibersinput(type="hidden" value=numberfibers name="numberfibersinput")
     - for(let i =0; i < numberfibers; i++)
       div(id="fiberdiv"+i)
-        input(id='fiberperc'+i type='number' name='fiberperc'+i required=true min="1" max="100")
+        input(id='fiberperc'+i type='number' name='fiberperc'+i required=true min="1" max="100" value=(undefined === yarn ? "" : yarn.fibercomposition[i].percentage))
         label(for="fiberperc"+i) %
         select(id="fibertype"+i required="true" name="fibertype"+i)
           each fiber in fibers
-            option(value=fiber._id) #{fiber.fibertype}
+            if(yarn === undefined)
+              option(value=fiber._id) #{fiber.fibertype}
+            else
+              option(value=fiber._id selected=(fiber._id.toString() === yarn.fibercomposition[i].fibertype._id.toString() ? "selected" : false)) #{fiber.fibertype}
     label(for="unitweight") Weight per unit (grams):
     input#unitweight(type="number" required="true" min="1" max="2000" name="unitweight" value=(undefined === yarn ? "": yarn.unitweight))
 
@@ -26,10 +35,13 @@ block content
     input#meterage(type="number" required="true" min="1" name='meterage' max="2000" value=(undefined === yarn ? "" : yarn.meterage))
 
     label(for="price") Price per unit:
-    input#price(type="type" required="true" minLength="1" pattern="\d+\.?\d*" name="price" value=(undefined === yarn ? "" : yarn.price.toString()))
+    input#price(type="number" step='0.01' required="true" min="0.01" name="price" value=(undefined === yarn ? "" : yarn.price))
 
     label(for="producer") Producer:
     select#producer(required="true" name="producer")
       each producer in producers
-        option(value=producer._id) #{producer.brandname}
-    button(type="submit") Add yarn
+        if(yarn === undefined)
+          option(value=producer._id) #{producer.brandname}
+        else
+          option(value=producer._id selected=(producer._id.toString() === yarn.producer._id.toString() ? 'selected' : false)) #{producer.brandname}
+    button(type="submit") Save

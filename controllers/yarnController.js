@@ -302,3 +302,142 @@ exports.yarn_create_post = [
     });
   },
 ];
+
+exports.yarn_update_get = (req, res, next) => {
+  async.parallel(
+    {
+      producers(callback) {
+        Producer.find({}, null, { sort: { brandname: 1 } }).exec(callback);
+      },
+      weights(callback) {
+        Weight.find().exec(callback);
+      },
+      fibers(callback) {
+        Fiber.find().exec(callback);
+      },
+      yarn(callback) {
+        Yarn.findById(req.params.id)
+          .populate("producer")
+          .populate("fibercomposition.fibertype")
+          .exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      console.log(results.yarn.price);
+      res.render("yarn_create", {
+        title: "Edit yarn",
+        producers: results.producers,
+        weights: results.weights,
+        fibers: results.fibers,
+        yarn: results.yarn,
+        numberfibers: results.yarn.fibercomposition.length,
+      });
+    }
+  );
+};
+
+exports.yarn_update_post = [
+  (req, res, next) => {
+    req.body.price = Number(req.body.price);
+    let fiberarray = [];
+    const numberfibers = req.body.numberfibersinput;
+    for (let i = 0; i < numberfibers; i++) {
+      const bodynameperc = "fiberperc" + i;
+      const bodynametype = "fibertype" + i;
+      const fiberobj = {
+        fibertype: req.body[bodynametype],
+        percentage: Number(req.body[bodynameperc]),
+      };
+      fiberarray.push(fiberobj);
+    }
+    req.body.numberfibersinput = fiberarray;
+    next();
+  },
+
+  body("yarnname", "Yarn name is required")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("weight", "Weight must be selected")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("unitweight")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("Unit weight must not be empty")
+    .isNumeric()
+    .withMessage("Must be a number"),
+  body("meterage")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("Meterage must not be empty")
+    .isNumeric()
+    .withMessage("Must be a number"),
+  body("price")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("Price  must not be empty")
+    .isNumeric()
+    .withMessage("Must be a number"),
+  body("producer", "Producer must be selected")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+
+    const yarn = new Yarn({
+      name: req.body.yarnname,
+      weight: req.body.weight,
+      fibercomposition: req.body.numberfibersinput,
+      unitweight: req.body.unitweight,
+      meterage: req.body.meterage,
+      price: req.body.price,
+      producer: req.body.producer,
+      _id: req.params.id,
+    });
+    if (!errors.isEmpty()) {
+      async.parallel(
+        {
+          producers(callback) {
+            Producer.find({}, null, { sort: { brandname: 1 } }).exec(callback);
+          },
+          weights(callback) {
+            Weight.find().exec(callback);
+          },
+          fibers(callback) {
+            Fiber.find().exec(callback);
+          },
+        },
+        (err, results) => {
+          if (err) {
+            return next(err);
+          }
+          res.render("yarn_create", {
+            title: "Add yarn",
+            producers: results.producers,
+            weights: results.weights,
+            fibers: results.fibers,
+            numberfibers: yarn.fibercomposition.length,
+            yarn,
+            errors: errors.array(),
+          });
+        }
+      );
+      return;
+    }
+    Yarn.findByIdAndUpdate(req.params.id, yarn, {}, (err, theyarn) => {
+      if (err) {
+        return next(err);
+      }
+      res.redirect(yarn.url);
+    });
+  },
+];

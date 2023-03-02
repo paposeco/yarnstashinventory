@@ -11,8 +11,8 @@ block content
     label(for="country") Country:
     select#country(name="country")
       each country in countries
-        option(value=country) #{country}
+        option(value=country selected=(selected_country === country ? "selected" : false)) #{country}
     label(for="contact") Contact:
     input#contact(type="text" name="contact" value=(undefined === currproducer ? "" : currproducer.contact))
 
-    button(type="submit") Create
+    button(type="submit") Save

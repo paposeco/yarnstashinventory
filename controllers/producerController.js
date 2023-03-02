@@ -110,6 +110,7 @@ exports.producer_create_post = [
         title: "Add new producer",
         countries: countryList.getNames(),
         currproducer: req.body,
+        selected_country: req.body.country,
         errors: errors.array(),
       });
       return;
@@ -126,5 +127,70 @@ exports.producer_create_post = [
       }
       res.redirect(newproducer.url);
     });
+  },
+];
+
+exports.producer_update_get = (req, res, next) => {
+  Producers.findById(req.params.id).exec((err, producer) => {
+    if (err) {
+      return next(err);
+    }
+    if (producer === null) {
+      const err = new Error("Producer not found");
+      err.status = 404;
+      return next(err);
+    }
+    res.render("producer_create", {
+      title: "Edit producer",
+      countries: countryList.getNames(),
+      currproducer: producer,
+      selected_country: producer.country,
+    });
+  });
+};
+
+exports.producer_update_post = [
+  body("brandname")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("You must specify a Brand name."),
+  body("country").escape().optional({ checkFalsy: true }),
+  body("contact")
+    .trim()
+    .escape()
+    .optional({ checkFalsy: true })
+    .isAlphanumeric("en-US", { ignore: " @+" })
+    .withMessage("Only letters, numbers, @ and + are allowed."),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.render("producer_create", {
+        title: "Edit producer",
+        countries: countryList.getNames(),
+        currproducer: req.body,
+        selected_country: req.body.country,
+        errors: errors.array(),
+      });
+      return;
+    }
+
+    const updatedproducer = new Producers({
+      brandname: req.body.brandname,
+      country: req.body.country,
+      contact: req.body.contact,
+      _id: req.params.id,
+    });
+    Producers.findByIdAndUpdate(
+      req.params.id,
+      updatedproducer,
+      {},
+      (err, theproducer) => {
+        if (err) {
+          return next(err);
+        }
+        res.redirect(updatedproducer.url);
+      }
+    );
   },
 ];

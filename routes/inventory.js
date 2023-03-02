@@ -50,6 +50,18 @@ router.post("/yarncolorway/:id/delete", yarn_instance_controller.delete_post);
 router.get("/yarn/:id/delete", yarn_controller.yarn_delete_get);
 router.post("/yarn/:id/delete", yarn_controller.yarn_delete_post);
 
+// update
+
+router.get("/producers/:id/update", producer_controller.producer_update_get);
+router.post("/producers/:id/update", producer_controller.producer_update_post);
+router.get("/yarncolorway/:yarnid/update", yarn_instance_controller.update_get);
+router.post(
+  "/yarncolorway/:yarnid/update",
+  yarn_instance_controller.update_post
+);
+router.get("/yarn/:id/update", yarn_controller.yarn_update_get);
+router.post("/yarn/:id/update", yarn_controller.yarn_update_post);
+
 // details
 router.get("/fiber/:id", fiber_controller.fiber_detail);
 router.get("/weight/:id", weight_controller.weight_detail);
