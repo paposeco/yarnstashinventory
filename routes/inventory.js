@@ -1,6 +1,12 @@
 var express = require("express");
 var router = express.Router();
 
+const multer = require("multer");
+
+// put it storage on host
+const storage = multer.memoryStorage();
+const upload = multer({ dest: "public/images/uploads/" });
+
 const yarn_controller = require("../controllers/yarnController");
 const fiber_controller = require("../controllers/fiberController");
 const weight_controller = require("../controllers/weightController");
@@ -12,7 +18,6 @@ router.get("/", yarn_controller.index);
 router.get("/fiber", fiber_controller.fiber_list);
 router.get("/weight", weight_controller.weight_list);
 router.get("/producers", producer_controller.producers_list);
-router.get("/yarn", yarn_controller.yarn_list);
 
 // create
 // if this goes after details, the controller chooses the /:id functions
@@ -32,7 +37,11 @@ router.post(
   yarn_instance_controller.create_instance_post
 );
 router.get("/yarn/create/:numberfibers", yarn_controller.yarn_create_get);
-router.post("/yarn/create/:numberfibers", yarn_controller.yarn_create_post);
+router.post(
+  "/yarn/create/:numberfibers",
+  upload.single("yarnphoto"),
+  yarn_controller.yarn_create_post
+);
 
 router.get("/yarn/selectfibers", yarn_controller.yarn_create_fiber_input_get);
 router.post("/yarn/selectfibers", yarn_controller.yarn_create_fiber_input_post);
@@ -60,7 +69,15 @@ router.post(
   yarn_instance_controller.update_post
 );
 router.get("/yarn/:id/update", yarn_controller.yarn_update_get);
-router.post("/yarn/:id/update", yarn_controller.yarn_update_post);
+router.post(
+  "/yarn/:id/update",
+  upload.single("yarnphoto"),
+  yarn_controller.yarn_update_post
+);
+
+// delete image from yarn
+router.get("/yarn/:id/deleteimage", yarn_controller.delete_image_get);
+router.post("/yarn/:id/deleteimage", yarn_controller.delete_image_post);
 
 // details
 router.get("/fiber/:id", fiber_controller.fiber_detail);

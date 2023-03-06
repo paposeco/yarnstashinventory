@@ -5,17 +5,30 @@ html
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
     div.bodymargins
+      h2 Categories
+      ul
+        li
+          a(href='/inventory') Yarn Inventory
+        li
+          a(href='/inventory/fiber') Yarn by Fiber
+        li
+          a(href='/inventory/weight') Yarn by Weight
+        li
+          a(href='/inventory/producers') Yarn Producers
+      h2 Add to inventory
+      ul
+        li
+          a(href='/inventory/yarn/selectfibers') Add yarn
+        li
+          a(href='/inventory/producers/create') Add producer
+        li
+          a(href='/inventory/fiber/create') Add fiber type
+        li
+          a(href='/inventory/weight/create') Add yarn weight
+
+
     div
-      nav
-        ul
-          li
-            a(href='/inventory/yarn') Yarn
-          li
-            a(href='/inventory/fiber') Yarn by Fiber
-          li
-            a(href='/inventory/weight') Yarn by Weight
-          li
-            a(href='/inventory/producers') Yarn Producers
 
       block content
+
     div.bodymargins

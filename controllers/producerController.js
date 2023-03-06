@@ -17,15 +17,26 @@ exports.producers_list = (req, res, next) => {
 };
 
 exports.producer_detail = (req, res, next) => {
-  Producers.findById(req.params.id).exec((err, producerdetail) => {
-    if (err) {
-      return next(err);
+  async.parallel(
+    {
+      find_producer(callback) {
+        Producers.findById(req.params.id).exec(callback);
+      },
+      find_yarn(callback) {
+        Yarn.find({ producer: req.params.id }).sort({ name: 1 }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      res.render("producer_detail", {
+        title: "Producer",
+        producer_info: results.find_producer,
+        yarn: results.find_yarn,
+      });
     }
-    res.render("producer_detail", {
-      title: "Producer",
-      producer_info: producerdetail,
-    });
-  });
+  );
 };
 
 exports.producer_delete_get = (req, res, next) => {

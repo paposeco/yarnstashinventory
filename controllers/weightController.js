@@ -4,15 +4,38 @@ const async = require("async");
 const { body, validationResult } = require("express-validator");
 
 exports.weight_list = (req, res, next) => {
-  Weight.find().exec(function(err, list_weights) {
-    if (err) {
-      return next(err);
+  async.parallel(
+    {
+      find_weight(callback) {
+        Weight.find().exec(callback);
+      },
+      find_yarn(callback) {
+        Yarn.find().exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      const weightmap = new Map();
+      for (let i = 0; i < results.find_weight.length; i++) {
+        const weightid = results.find_weight[i]._id.toString();
+        let counter = 0;
+        results.find_yarn.forEach((yarn) =>
+          yarn.weight._id.toString() === weightid ? counter++ : null
+        );
+        weightmap.set(weightid, {
+          name: results.find_weight[i].weight,
+          url: results.find_weight[i].url,
+          counter: counter,
+        });
+      }
+      res.render("weight_list", {
+        title: "Yarn Weights",
+        weight_list: weightmap,
+      });
     }
-    res.render("weight_list", {
-      title: "Yarn Weights",
-      weight_list: list_weights,
-    });
-  });
+  );
 };
 
 exports.weight_detail = (req, res, next) => {

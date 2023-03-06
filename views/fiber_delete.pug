@@ -1,7 +1,7 @@
 extends layout
 
 block content
-  h1  #{title} #{fiber.fibertype}
+  h1= title
   if (yarn.length > 0)
     p Before deleting this fiber, you need to delete the following yarn:
     ul

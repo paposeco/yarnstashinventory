@@ -3,6 +3,8 @@ const Yarn = require("../models/yarn");
 const Producers = require("../models/producer");
 const async = require("async");
 const { body, validationResult } = require("express-validator");
+require("dotenv").config();
+const editingforms = process.env.EDIT_FORMS_KEY;
 
 exports.instance_detail = (req, res, next) => {
   // turns out, you can populate a populated field. I'm leaving this here to remember where I began.
@@ -59,14 +61,46 @@ exports.delete_get = (req, res, next) => {
     });
 };
 
-exports.delete_post = (req, res, next) => {
-  YarnInstance.findByIdAndRemove(req.body.yarninstanceid, (err) => {
-    if (err) {
-      return next(err);
+exports.delete_post = [
+  body("editformpass")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("Password is required."),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty() || req.body.editformpass !== editingforms) {
+      YarnInstance.findById(req.body.yarninstanceid)
+        .populate("yarn")
+        .exec((err, yarninstance) => {
+          if (err) {
+            return next(err);
+          }
+          if (errors.isEmpty()) {
+            res.render("yarn_instance_delete", {
+              title: "Delete dyelot",
+              yarninstance: yarninstance,
+              errors: "Wrong password",
+            });
+            return;
+          } else {
+            res.render("yarn_instance_delete", {
+              title: "Delete dyelot",
+              yarninstance: yarninstance,
+              errors: errors,
+            });
+            return;
+          }
+        });
     }
-    res.redirect("/inventory/yarn/" + req.body.yarnid);
-  });
-};
+    YarnInstance.findByIdAndRemove(req.body.yarninstanceid, (err) => {
+      if (err) {
+        return next(err);
+      }
+      res.redirect("/inventory/yarn/" + req.body.yarnid);
+    });
+  },
+];
 
 exports.create_instance_get = (req, res, next) => {
   async.parallel(
@@ -163,7 +197,7 @@ exports.create_instance_post = [
             yarninfo: results.findyarninfo,
             yarninstances: results.findinstances,
             errors:
-              "Error: Dyelot already exists. Update stock on that dyelot instead",
+              "Error: Dyelot for this colorway already exists. Update stock on that dyelot instead",
           });
           return;
         }
@@ -239,6 +273,11 @@ exports.update_post = [
     .withMessage("Stock is required")
     .isNumeric({ no_symbols: true })
     .withMessage("Only integers are allowed"),
+  body("editformpass")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("Password is required"),
 
   (req, res, next) => {
     const errors = validationResult(req);
@@ -264,6 +303,16 @@ exports.update_post = [
             yarninfo: results.findyarninstance.yarn,
             yarninstances: results.findinstances,
             errors: errors.array(),
+          });
+          return;
+        }
+        if (req.body.editformpass !== editingforms) {
+          res.render("yarn_instance_create", {
+            title: "Edit colorway or dyelot",
+            curryarninstance: req.body,
+            yarninfo: results.findyarninstance.yarn,
+            yarninstances: results.findinstances,
+            errors: "Wrong password",
           });
           return;
         }

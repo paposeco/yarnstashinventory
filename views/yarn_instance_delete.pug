@@ -3,8 +3,12 @@ extends layout
 block content
   h1 #{title} for colorway #{yarninstance.colorwayid} 
   p Are you sure want to delete #{yarninstance.yarn.name}, dyelot #{yarninstance.dyelot}?
+  if(errors)
+    p= errors
 
   form(method="POST" action="")
     input#yarninstanceid(type="hidden" name="yarninstanceid" value=yarninstance._id)
     input#yarnid(type="hidden" name="yarnid" value=yarninstance.yarn._id)
+    label(for="editformpass") Password:
+    input#editformpass(type="password" name="editformpass" required="true")
     button(type="submit") Delete

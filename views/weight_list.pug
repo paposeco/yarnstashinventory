@@ -3,11 +3,14 @@ extends layout
 block content
   h1= title
   ul
-    each weight in weight_list
-      li
-        a(href=weight.url) #{weight.weight}
+    if(weight_list.length === 0)
+      li There are no yarn weights.
     else
-      li There are no yarn weights. 
+      each [key, value] of weight_list
+        li
+          a(href=value.url) #{value.name}
+          |
+          |(#{value.counter})
 
   p
     a(href="weight/create") Add Yarn Weight

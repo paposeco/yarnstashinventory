@@ -10,6 +10,14 @@ block content
   if producer_info.contact
     p Contact: #{producer_info.contact}
 
+  h2 Yarn available
+  if(yarn.length > 0)
+    ul
+      each yarnelement in yarn
+        li
+          a(href=yarnelement.url) #{producer_info.brandname} #{yarnelement.name}
+  else
+    p Empty
   p
     a(href=producer_info.url+"/update") Edit
   p

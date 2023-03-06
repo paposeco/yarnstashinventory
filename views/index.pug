@@ -1,8 +1,21 @@
 extends layout
 
 block content
-  h1= title
-  - var stock = 0
-  each instance in data.yarn_instances_list
-    - stock += instance.stock
-  p There are #{data.yarn_count} yarn types in inventory and #{stock} total units available.
+  div
+    h1= title
+    if(error)
+      p= error
+    ul
+      each [key, value] of producers 
+        li #{value.brandname}
+        ul
+          each yarnunit in value.yarn
+            - const yarninfo = yarndic.get(yarnunit);
+            if(yarninfo !== undefined)
+              li
+                a(href=yarninfo.url) #{yarninfo.name}
+                |
+                | stock: #{yarninfo.stock} colorways: #{yarninfo.colorways.length}
+            else
+              li There is no available yarn from this producer.
+

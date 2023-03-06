@@ -6,6 +6,9 @@ block content
 
   h2 #{yarn_info.producer.brandname} #{yarn_info.name}
 
+  if(yarn_info.imagepath !== "" && yarn_info.imagepath !== undefined)
+    img(src=yarn_info.imagepath alt="yarnimage" class="yarnimage")
+
   p Weight: #{yarn_info.weight.weight}
 
   - var composition = "";

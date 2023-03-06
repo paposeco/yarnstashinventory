@@ -2,7 +2,7 @@ body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   display: grid;
-  grid-template-columns: 1fr 10fr 1fr;
+  grid-template-columns: 2fr 8fr 2fr;
 }
 
 a {
@@ -19,4 +19,3 @@ nav ul{
 nav ul li{
     width: 150px;
 }
-

@@ -5,15 +5,45 @@ const { body, validationResult } = require("express-validator");
 
 // list fibers
 exports.fiber_list = (req, res, next) => {
-  Fiber.find().exec(function(err, list_fibers) {
-    if (err) {
-      return next(err);
+  async.parallel(
+    {
+      find_fiber(callback) {
+        Fiber.find().exec(callback);
+      },
+      find_yarn(callback) {
+        Yarn.find().exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      const fibermap = new Map();
+      for (let i = 0; i < results.find_fiber.length; i++) {
+        let counter = 0;
+        for (let j = 0; j < results.find_yarn.length; j++) {
+          const fiberinyarn = results.find_yarn[j].fibercomposition;
+          fiberinyarn.forEach((fib) => {
+            console.log(fib._id.toString());
+            fib.fibertype._id.toString() ===
+              results.find_fiber[i]._id.toString()
+              ? ++counter
+              : null;
+          });
+        }
+        fibermap.set(results.find_fiber[i]._id.toString(), {
+          fibername: results.find_fiber[i].fibertype,
+          counter: counter,
+          url: results.find_fiber[i].url,
+        });
+      }
+      console.log(fibermap);
+      res.render("fiber_list", {
+        title: "Fiber",
+        fiber_list: fibermap,
+      });
     }
-    res.render("fiber_list", {
-      title: "Fiber",
-      fiber_list: list_fibers,
-    });
-  });
+  );
 };
 
 exports.fiber_detail = (req, res, next) => {
@@ -34,7 +64,7 @@ exports.fiber_detail = (req, res, next) => {
         return next(err);
       }
       res.render("fiber_detail", {
-        title: "Fiber: ",
+        title: "Fiber: " + results.findfiber.fibertype,
         fiber_info: results.findfiber,
         yarn: results.findyarnwiththisfiber,
       });
@@ -65,7 +95,7 @@ exports.fiber_delete_get = (req, res, next) => {
         return;
       }
       res.render("fiber_delete", {
-        title: "Delete: ",
+        title: "Delete: " + results.fiberexists.fibertype,
         fiber: results.fiberexists,
         yarn: results.yarnwiththisfiber,
       });
@@ -91,7 +121,7 @@ exports.fiber_delete_post = (req, res, next) => {
       }
       if (results.yarnwiththisfiber.length > 0) {
         res.render("fiber_delete", {
-          title: "Delete: ",
+          title: "Delete: " + results.fiberexists.fibertype,
           fiber: results.fiberexists,
           yarn: results.yarnwiththisfiber,
         });

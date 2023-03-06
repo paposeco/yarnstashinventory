@@ -1,0 +1,8 @@
+extends layout
+
+block content
+  h1= title
+  p Are you sure you want to delete the photo from #{yarninfo.producer.brandname} #{yarninfo.name}?
+  form(method="POST" action="")
+    input#yarnid(type="hidden" name="yarnid" value=yarninfo._id)
+    button(type="submit") Yes, delete it.

@@ -3,12 +3,14 @@ extends layout
 block content
   h1= title
   ul
-    each element in fiber_list
-      li
-        a(href=element.url) #{element.fibertype}
-    else
+    if(fiber_list.length === 0)
       li There are no fibers.
-
+    else
+      each [key, value] of fiber_list
+        li
+          a(href=value.url) #{value.fibername}
+          |
+          |(#{value.counter})
 
   p
    a(href="fiber/create") Add Fiber

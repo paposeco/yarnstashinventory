@@ -18,6 +18,7 @@ const YarnSchema = new Schema({
     ref: "Producer",
     required: true,
   },
+  imagepath: { type: String },
 });
 
 YarnSchema.virtual("url").get(function() {

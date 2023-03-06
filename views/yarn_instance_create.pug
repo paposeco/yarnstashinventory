@@ -14,6 +14,9 @@ block content
       input#colorway(type="string" name="colorway" required="true" value=(undefined===curryarninstance ? "" : curryarninstance.colorwayid))
       label(for="stock") Stock:
       input#stock(type="number" name="stock" required="true" min="0" max="999" value=(undefined===curryarninstance ? "" : curryarninstance.stock))
+      if(curryarninstance !== undefined)
+        label(for="editformpass") Password:
+        input#editformpass(type="password" name="editformpass" required="true")
       button(type="submit") Save
 
   if(yarninstances.length > 0)

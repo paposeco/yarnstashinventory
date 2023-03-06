@@ -6,7 +6,7 @@ block content
   if(errors)
     p Error: #{errors}
 
-  form(method="POST" action="")
+  form(method="POST" action="" enctype="multipart/form-data")
     label(for="yarnname") Yarn name:
     input#yarnname(type="text" required="true" name="yarnname" value=(undefined === yarn ? "" : yarn.name))
     label(for="weight") Yarn weight:
@@ -44,4 +44,16 @@ block content
           option(value=producer._id) #{producer.brandname}
         else
           option(value=producer._id selected=(producer._id.toString() === yarn.producer._id.toString() ? 'selected' : false)) #{producer.brandname}
+    if(!photo)
+      label(for='yarnphoto') Upload photo
+      input#photo(type="file" name="yarnphoto")
+      if(yarn !== undefined)
+        label(for="editformpass") Password:
+        input#editformpass(type="password" name="editformpass" required="true")
     button(type="submit") Save
+
+  if(photo)
+    div#photoplace
+      img(src=yarn.imagepath alt="yarnimage")
+
+      a(href=yarn.url+"/deleteimage") Delete image
