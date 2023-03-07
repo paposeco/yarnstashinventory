@@ -8,7 +8,7 @@ block content
 
   form(method="POST" action="" enctype="multipart/form-data")
     label(for="yarnname") Yarn name:
-    input#yarnname(type="text" required="true" name="yarnname" value=(undefined === yarn ? "" : yarn.name))
+    input.form-input(id="yarnname" type="text" required="true" name="yarnname" value=(undefined === yarn ? "" : yarn.name))
     label(for="weight") Yarn weight:
     select#weight(required="true" name="weight")
       each weight in weights

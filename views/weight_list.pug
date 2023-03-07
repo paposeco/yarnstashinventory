@@ -1,13 +1,14 @@
 extends layout
 
 block content
-  h1= title
-  ul
+  h1.pb-2 #{title}
+  ul.space-y-2
     if(weight_list.length === 0)
       li There are no yarn weights.
     else
       each [key, value] of weight_list
         li
+          i.las.la-caret-right
           a(href=value.url) #{value.name}
           |
           |(#{value.counter})

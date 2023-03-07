@@ -5,17 +5,22 @@ block content
     h1= title
     if(error)
       p= error
-    ul
+    ul.space-y-2.pl-2.pt-2
       each [key, value] of producers 
-        li #{value.brandname}
-        ul
+        li
+          h3 #{value.brandname}
+        ul.space-y-2
           each yarnunit in value.yarn
             - const yarninfo = yarndic.get(yarnunit);
             if(yarninfo !== undefined)
               li
+                i.las.la-caret-right
                 a(href=yarninfo.url) #{yarninfo.name}
                 |
-                | stock: #{yarninfo.stock} colorways: #{yarninfo.colorways.length}
+                |
+                i.las.la-forward
+                |
+                | Stock: #{yarninfo.stock}, Colorways: #{yarninfo.colorways.length}
             else
               li There is no available yarn from this producer.
 

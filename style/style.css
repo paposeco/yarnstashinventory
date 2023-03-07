@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base{
+    h1 {
+        @apply text-2xl;
+    }
+    h2 {
+        @apply text-xl; 
+    }
+    h3 {
+        @apply text-lg;
+    }
+    ul {
+        @apply list-inside;
+    }
+    li {
+        @apply pl-1;
+    }
+    li a {
+        @apply pl-1;
+    }
+    form{
+        @apply flex;
+        @apply flex-col;
+    }
+    form-input{
+        @apply rounded-md;
+    }
+}
+
+body {
+  padding: 75px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  display: grid;
+  grid-template-columns: 2fr 8fr 2fr;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.form-input{
+    /* how to add other classes to a class? */
+}

@@ -2,33 +2,43 @@ doctype html
 html
   head
     title= title
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
     link(rel='stylesheet', href='/stylesheets/style.css')
-  body
-    div.bodymargins
+    link(rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css")
+  body.bg-orange-50.font-mono.text-neutral-700 
+    div.w-max.space-y-3
       h2 Categories
-      ul
+      ul.space-y-3 
         li
+          i.las.la-caret-right
           a(href='/inventory') Yarn Inventory
         li
+          i.las.la-caret-right
           a(href='/inventory/fiber') Yarn by Fiber
         li
+          i.las.la-caret-right
           a(href='/inventory/weight') Yarn by Weight
         li
+          i.las.la-caret-right
           a(href='/inventory/producers') Yarn Producers
-      h2 Add to inventory
-      ul
+      h2.pt-2 Add to inventory
+      ul.space-y-3
         li
+          i.las.la-caret-right
           a(href='/inventory/yarn/selectfibers') Add yarn
         li
+          i.las.la-caret-right
           a(href='/inventory/producers/create') Add producer
         li
+          i.las.la-caret-right
           a(href='/inventory/fiber/create') Add fiber type
         li
+          i.las.la-caret-right
           a(href='/inventory/weight/create') Add yarn weight
-
 
     div
 
       block content
 
-    div.bodymargins
+    div

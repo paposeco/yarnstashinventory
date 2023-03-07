@@ -1,13 +1,14 @@
 extends layout
 
 block content
-  h1= title
-  ul
+  h1.pb-2 #{title}
+  ul.space-y-2
     if(fiber_list.length === 0)
       li There are no fibers.
     else
       each [key, value] of fiber_list
         li
+          i.las.la-caret-right
           a(href=value.url) #{value.fibername}
           |
           |(#{value.counter})

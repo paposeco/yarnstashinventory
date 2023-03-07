@@ -1,16 +1,18 @@
 extends layout
 
 block content
-  h1= title
+  h1.pb-2 #{title}
 
-  ul
+  ul.space-y-2
     each producer in producers_list
       if producer.contact
         li
+          i.las.la-caret-right
           a(href=producer.url) #{producer.brandname}
           |   Contact: #{producer.contact}
       else
         li
+          i.las.la-caret-right
           a(href=producer.url) #{producer.brandname}
 
   p

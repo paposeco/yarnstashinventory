@@ -31,7 +31,7 @@ exports.weight_list = (req, res, next) => {
         });
       }
       res.render("weight_list", {
-        title: "Yarn Weights",
+        title: "Weight",
         weight_list: weightmap,
       });
     }
