@@ -2,17 +2,18 @@ extends layout
 
 block content
 
-  h1 #{title} #{weight_info.weight}
+  h1= title
+
+  div.editlinksdiv
+    a.editupdlink(href=weight_info.url+"/delete") Delete weight
 
   if (yarninfo.length > 0)
     p Yarn in this weight:
     ul
       each yarn in yarninfo
         li
+          i.las.la-caret-right
           a(href=yarn.url) #{yarn.producer.brandname} #{yarn.name}
 
   else
     p There is no yarn available with this weight. 
-
-  p
-    a(href=weight_info.url+"/delete") Delete 

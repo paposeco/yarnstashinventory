@@ -2,26 +2,28 @@ extends layout
 
 block content
   h1= title
+  div.descriptiondiv
+    p Name: #{producer_info.brandname}
+    if producer_info.country
+      p Country: #{producer_info.country}
 
-  p Name: #{producer_info.brandname}
-  if producer_info.country
-    p Country: #{producer_info.country}
+    if producer_info.contact
+      p Contact: #{producer_info.contact}
 
-  if producer_info.contact
-    p Contact: #{producer_info.contact}
+  div.editlinksdiv
+    a.editupdlink(href=producer_info.url+"/update") Edit
+    a.editupdlink(href=producer_info.url+"/delete") Delete
 
-  h2 Yarn available
+  h2 Yarn available from this producer
   if(yarn.length > 0)
     ul
       each yarnelement in yarn
         li
+          i.las.la-caret-right
           a(href=yarnelement.url) #{producer_info.brandname} #{yarnelement.name}
   else
     p Empty
-  p
-    a(href=producer_info.url+"/update") Edit
-  p
-    a(href=producer_info.url+"/delete") Delete
+
 
 
 

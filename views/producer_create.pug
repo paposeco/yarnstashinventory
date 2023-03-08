@@ -6,13 +6,15 @@ block content
   if(errors)
     p #{errors.msg}
   form(method="POST" action="")
-    label(for="brandname") Brand name:
-    input#brandname(type="text" required=true name="brandname" value=(undefined === currproducer ? "" : currproducer.brandname))
-    label(for="country") Country:
-    select#country(name="country")
-      each country in countries
-        option(value=country selected=(selected_country === country ? "selected" : false)) #{country}
-    label(for="contact") Contact:
-    input#contact(type="text" name="contact" value=(undefined === currproducer ? "" : currproducer.contact))
-
+    div.inputdiv
+      label(for="brandname") Brand name:
+      input#brandname(type="text" required=true name="brandname" value=(undefined === currproducer ? "" : currproducer.brandname))
+    div.inputdiv
+      label(for="country") Country:
+      select#country(name="country")
+        each country in countries
+          option(value=country selected=(selected_country === country ? "selected" : false)) #{country}
+    div.inputdiv
+      label(for="contact") Contact:
+      input#contact(type="text" name="contact" value=(undefined === currproducer ? "" : currproducer.contact))
     button(type="submit") Save

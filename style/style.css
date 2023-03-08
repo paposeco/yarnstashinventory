@@ -21,26 +21,45 @@
     li a {
         @apply pl-1;
     }
+    a{
+        @apply text-cyan-500 hover:text-cyan-700;
+    }
     form{
-        @apply flex;
-        @apply flex-col;
+        @apply flex flex-col gap-2 w-1/2 min-w-min mb-3;
     }
-    form-input{
-        @apply rounded-md;
+    input[type="text"], input[type="number"], input[type='password']{
+        @apply px-1.5 py-1 w-full rounded-md;
+    } 
+    select{
+        @apply py-1 rounded-md w-full;
     }
+    label{
+        @apply shrink-0;
+    }
+    .inputdiv{
+        @apply flex flex-row items-center gap-2;
+    }
+    button[type="submit"], .editupdlink{
+        @apply bg-cyan-500 hover:bg-cyan-700 text-white hover:text-white font-bold py-2 px-4 rounded-full min-w-fit w-min;
+    }
+    .editlinksdiv{
+        @apply flex flex-row gap-2 mt-3 mb-6 ml-2;
+    }
+    .descriptiondiv{
+        @apply pl-2 mb-4;
+    }
+    .yarnimage{
+        @apply mt-4 mb-4;
+    }
+
 }
 
 body {
   padding: 75px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   display: grid;
   grid-template-columns: 2fr 8fr 2fr;
 }
 
 a {
   color: #00B7FF;
-}
-
-.form-input{
-    /* how to add other classes to a class? */
 }

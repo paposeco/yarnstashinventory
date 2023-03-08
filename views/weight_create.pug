@@ -6,12 +6,15 @@ block content
   if(errorspresent)
     p #{errorspresent.msg}
   form(method="POST" action="")
-    select#createweight(required="true" name="createweight")
-       each weight in weightstocreate
-          option(value=weight) #{weight}
-    button(type="submit") Create 
+    div.inputdiv
+      label(for="createweight") Yarn weight:
+      select#createweight(required="true" name="createweight")
+         each weight in weightstocreate
+            option(value=weight) #{weight}
+    button(type="submit") Save 
  
   p If you don't see a weight on the drop down menu, it's because the weight has already been created. Check the existing weights at
      |
      |
      a(href='/inventory/weight') Yarn By Weight
+     |.

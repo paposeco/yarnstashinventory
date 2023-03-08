@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node ./bin/www",
     "devstart": "nodemon ./bin/www",
-    "serverstart": "DEBUG=yarnstashinventory:* npm run devstart"
+    "tail": "tailwindcss -i ./style/style.css -o ./public/stylesheets/style.css --watch",
+    "serverstart": "DEBUG=yarnstashinventory:* npm run devstart & npm run tail"
   },
   "dependencies": {
     "async": "^3.2.4",

@@ -6,24 +6,32 @@ block content
 
   h2 #{yarn_info.producer.brandname} #{yarn_info.name}
 
-  if(yarn_info.imagepath !== "" && yarn_info.imagepath !== undefined)
-    img(src=yarn_info.imagepath alt="yarnimage" class="yarnimage")
+  div.descriptiondiv
+    div.yarnimage
+      if(yarn_info.imagepath !== "" && yarn_info.imagepath !== undefined)
+        img.w-fit(src=yarn_info.imagepath alt="yarnimage" class="yarnimage")
+        a.editupdlink(href=yarn_info.url+"/deleteimage") Delete image
 
-  p Weight: #{yarn_info.weight.weight}
+    p Weight: #{yarn_info.weight.weight}
 
-  - var composition = "";
-      each composition_detail in yarn_info.fibercomposition
-        - composition += composition_detail.percentage +"% "+ composition_detail.fibertype.fibertype + " "
+    - var composition = "";
+        each composition_detail in yarn_info.fibercomposition
+          - composition += composition_detail.percentage +"% "+ composition_detail.fibertype.fibertype + " "
 
-  p Composition: #{composition}
-  p Unit weight: #{yarn_info.unitweight}g
-  p Meterage: #{yarn_info.meterage}m
-  if yarn_info.price
-    p Unit price: #{yarn_info.price} eur
+    p Composition: #{composition}
+    p Unit weight: #{yarn_info.unitweight}g
+    p Meterage: #{yarn_info.meterage}m
+    if yarn_info.price
+      p Unit price: #{yarn_info.price} eur
+
+  div.editlinksdiv
+       a.editupdlink(href='/inventory/yarncolorway/create/'+yarn_info._id) Add new colorway/dyelot
+       a.editupdlink(href=yarn_info.url+"/update") Edit yarn
+       a.editupdlink(href=yarn_info.url+"/delete") Delete yarn
 
   h2 Available Colorways
 
-  if(!yarncolorways)
+  if(yarncolorways.length === 0)
     p There are no available colorways for this yarn.
   else
     if(errors)
@@ -31,15 +39,7 @@ block content
     ul
       each colorway in yarncolorways
         li
+          i.las.la-caret-right
           a(href=colorway.url) #{colorway.colorwayid}
           |
           | (Dyelot: #{colorway.dyelot}, Stock: #{colorway.stock})
-
-
-  div
-    p
-      a(href='/inventory/yarncolorway/create/'+yarn_info._id) Add new colorway or dyelot
-    p
-      a(href=yarn_info.url+"/update") Edit
-    p
-      a(href=yarn_info.url+"/delete") Delete yarn

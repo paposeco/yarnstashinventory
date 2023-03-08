@@ -36,9 +36,8 @@ exports.instance_detail = (req, res, next) => {
         return next(err);
       }
       res.render("yarn_instance_detail", {
-        title: "Yarn Colorway",
+        title: results[1].brandname + " " + results[0].yarn.name,
         yarninstance: results[0],
-        producerdetails: results[1],
       });
     }
   );

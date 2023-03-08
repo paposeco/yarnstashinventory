@@ -2,12 +2,11 @@ extends layout
 
 block content
   h1= title
-  p #{producerdetails.brandname} #{yarninstance.yarn.name}
-  p Colorway: #{yarninstance.colorwayid}
-  p Dyelot: #{yarninstance.dyelot}
-  p Stock: #{yarninstance.stock}
+  div.descriptiondiv
+    p Colorway: #{yarninstance.colorwayid}
+    p Dyelot: #{yarninstance.dyelot}
+    p Stock: #{yarninstance.stock}
 
-  p
-    a(href=yarninstance.url+"/update") Edit
-  p
-    a(href=yarninstance.url+"/delete") Delete dyelot
+  div.editlinksdiv
+    a.editupdlink(href=yarninstance.url+"/update") Edit
+    a.editupdlink(href=yarninstance.url+"/delete") Delete

@@ -1,12 +1,13 @@
 extends layout
 
 block content
-  h1 #{title} #{yarn_info.producer.brandname} #{yarn_info.name}
+  h1= title
 
   if (yarncolorways.length > 0)
     p You need to delete the following colorways and dyelots, before deleting #{yarn_info.name}:
     ul
       each yarn in yarncolorways
+        i.las.la-caret-right
         li
           a(href=yarn.url) #{yarn.colorwayid}
   else
@@ -15,7 +16,8 @@ block content
       p= errors
     form(method="POST" action="")
       input#yarnid(name="yarnid" value=yarn_info._id type="hidden")
-      label(for="editformpass") Password:
-      input#editformpass(type="password" name="editformpass" required="true")
+      div.inputdiv
+        label(for="editformpass") Password:
+        input#editformpass(type="password" name="editformpass" required="true")
       button(type="submit") Delete
 

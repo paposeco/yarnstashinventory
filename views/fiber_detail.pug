@@ -4,6 +4,9 @@ block content
 
   h1= title
 
+  div.editlinksdiv
+    a.editupdlink(href=fiber_info.url+"/delete") Delete fiber
+
   if(yarn.length > 0)
      p Yarn with this fiber type:
      ul
@@ -23,7 +26,6 @@ block content
   else
     p There is no yarn available with this fiber type.
 
-  p
-    a(href=fiber_info.url+"/delete") Delete
+
 
 

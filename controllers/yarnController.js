@@ -5,6 +5,7 @@ const Weight = require("../models/weight");
 const Fiber = require("../models/fiber");
 const async = require("async");
 const fs = require("fs");
+const path = require("path");
 const { body, validationResult } = require("express-validator");
 require("dotenv").config();
 const editingforms = process.env.EDIT_FORMS_KEY;
@@ -106,20 +107,6 @@ exports.index = (req, res) => {
   );
 };
 
-/*
- * else {
- *   const infoobj = {
- *     name:
- *                 results.yarn_info[i].producer.brandname +
- *                 " " +
- *                 results.yarn_info[i].name,
- *     stock: 0,
- *     colorways: 0,
- *     url: results.yarn_info[i].url,
- *   };
- *   yarnmap.set(yarnid, infoobj);
- * } */
-
 exports.yarn_detail = (req, res, next) => {
   async.series(
     [
@@ -181,7 +168,11 @@ exports.yarn_delete_get = (req, res, next) => {
         res.redirect("/inventory/null");
       }
       res.render("yarn_delete", {
-        title: "Delete: ",
+        title:
+          "Delete: " +
+          results.findyarn.producer.brandname +
+          " " +
+          results.findyarn.name,
         yarn_info: results.findyarn,
         yarncolorways: results.findinstances,
       });
@@ -217,7 +208,11 @@ exports.yarn_delete_post = [
         }
         if (!errors.isEmpty()) {
           res.render("yarn_delete", {
-            title: "Delete: ",
+            title:
+              "Delete: " +
+              results.findyarn.producer.brandname +
+              " " +
+              results.findyarn.name,
             yarn_info: results.findyarn,
             yarncolorways: results.findinstances,
             errors: errors.array(),
@@ -226,7 +221,11 @@ exports.yarn_delete_post = [
         }
         if (req.body.editformpass !== editingforms) {
           res.render("yarn_delete", {
-            title: "Delete: ",
+            title:
+              "Delete: " +
+              results.findyarn.producer.brandname +
+              " " +
+              results.findyarn.name,
             yarn_info: results.findyarn,
             yarncolorways: results.findinstances,
             errors: "Wrong password",
@@ -236,7 +235,11 @@ exports.yarn_delete_post = [
 
         if (results.findinstances.length > 0) {
           res.render("yarn_delete", {
-            title: "Delete: ",
+            title:
+              "Delete: " +
+              results.findyarn.producer.brandname +
+              " " +
+              results.findyarn.name,
             yarn_info: results.findyarn,
             yarncolorways: results.findinstances,
           });
@@ -361,24 +364,10 @@ exports.yarn_create_post = [
     .trim()
     .isLength({ min: 1 })
     .escape(),
-  body("editformpass")
-    .trim()
-    .isLength({ min: 1 })
-    .escape()
-    .withMessage("Password is required"),
 
   (req, res, next) => {
     const errors = validationResult(req);
 
-    let filePath = "";
-
-    if (req.file) {
-      const host = req.hostname;
-      const filext = req.file.mimetype.substring(6);
-      filePath =
-        req.protocol + "://" + host + "/" + req.file.path + "." + filext;
-    }
-    const photoexists = results.yarn.imagepath === "" ? false : true;
     const yarn = new Yarn({
       name: req.body.yarnname,
       weight: req.body.weight,
@@ -387,7 +376,7 @@ exports.yarn_create_post = [
       meterage: req.body.meterage,
       price: req.body.price,
       producer: req.body.producer,
-      imagepath: filePath,
+      imagepath: req.file.path,
     });
     // this stays so that I trust my gut in the future
     /* findfibers(callback) {
@@ -399,7 +388,7 @@ exports.yarn_create_post = [
      *   Fiber.find({ _id: { $in: idsarray } }).exec(callback);
      * }, */
 
-    if (!errors.isEmpty() || req.body.editformpass !== editingforms) {
+    if (!errors.isEmpty()) {
       async.parallel(
         {
           producers(callback) {
@@ -424,7 +413,7 @@ exports.yarn_create_post = [
               fibers: results.fibers,
               numberfibers: yarn.fibercomposition.length,
               yarn,
-              photo: photoexists,
+              photo: false,
               errors: errors.array(),
             });
           } else {
@@ -435,7 +424,7 @@ exports.yarn_create_post = [
               fibers: results.fibers,
               numberfibers: yarn.fibercomposition.length,
               yarn,
-              photo: photoexists,
+              photo: false,
               errors: "Wrong password",
             });
           }
@@ -548,13 +537,10 @@ exports.yarn_update_post = [
     const errors = validationResult(req);
 
     let filePath = "";
-    if (req.file) {
-      const host = req.hostname;
-      const filext = req.file.mimetype.substring(6);
-      filePath =
-        req.protocol + "://" + host + "/" + req.file.path + "." + filext;
-    }
 
+    if (req.file) {
+      filePath = req.file.path;
+    }
     //in order to change the image, the user must delete the old one first
 
     const photoexists = filePath === "" ? false : true;
@@ -630,12 +616,11 @@ exports.delete_image_post = (req, res, next) => {
     if (err) {
       return next(err);
     }
-    const imagepath = yarn.imagepath;
-    // delete image from folder on host
-    const imagepathonhost = imagepath.substring(0, imagepath.indexOf(".", 35));
 
-    //doesn't work locally
-    fs.unlink(imagepathonhost, (err) => {
+    // delete image from folder on host
+    const imagepath = yarn.imagepath;
+    const pathonhost = "../public" + imagepath;
+    fs.unlink(path.join(__dirname, pathonhost), (err) => {
       if (err) throw err;
     });
 
@@ -660,3 +645,5 @@ exports.delete_image_post = (req, res, next) => {
     });
   });
 };
+
+// check what happens when we delete an image

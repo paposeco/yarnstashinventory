@@ -1,12 +1,13 @@
 extends layout
 
 block content
-  h1  #{title} #{weight.weight}
+  h1= title
   if (yarn.length > 0)
     p Before deleting this weight, you need to delete the following yarn:
     ul
       each yarnelement in yarn
         li
+          i.las.la-caret-right
           a(href=yarnelement.url) #{yarnelement.producer.brandname} #{yarnelement.name}
 
   else

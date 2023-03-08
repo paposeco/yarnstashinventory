@@ -161,7 +161,7 @@ exports.fiber_create_get = (req, res, next) => {
       }
     }
     res.render("fiber_create", {
-      title: "Create Fiber",
+      title: "Add Fiber",
       fiberstocreate: missingfibers,
     });
   });
@@ -177,7 +177,7 @@ exports.fiber_create_post = [
     });
     if (!errors.isEmpty()) {
       res.render("fiber_create", {
-        title: "Create Fiber",
+        title: "Add Fiber",
         errorspresent: errors,
       });
       return;

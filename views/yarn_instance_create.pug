@@ -8,15 +8,19 @@ block content
       p= errors
 
     form(method="POST" action="")
-      label(for="dyelot") Dyelot:
-      input#dyelot(type="string" name="dyelot" required="true" value=(undefined===curryarninstance ? "" : curryarninstance.dyelot))
-      label(for="colorway") Colorway:
-      input#colorway(type="string" name="colorway" required="true" value=(undefined===curryarninstance ? "" : curryarninstance.colorwayid))
-      label(for="stock") Stock:
-      input#stock(type="number" name="stock" required="true" min="0" max="999" value=(undefined===curryarninstance ? "" : curryarninstance.stock))
+      div.inputdiv
+        label(for="dyelot") Dyelot:
+        input#dyelot(type="text" name="dyelot" required="true" value=(undefined===curryarninstance ? "" : curryarninstance.dyelot))
+      div.inputdiv
+        label(for="colorway") Colorway:
+        input#colorway(type="text" name="colorway" required="true" value=(undefined===curryarninstance ? "" : curryarninstance.colorwayid))
+      div.inputdiv
+        label(for="stock") Stock:
+        input#stock(type="number" name="stock" required="true" min="0" max="999" value=(undefined===curryarninstance ? "" : curryarninstance.stock))
       if(curryarninstance !== undefined)
-        label(for="editformpass") Password:
-        input#editformpass(type="password" name="editformpass" required="true")
+        div.inputdiv
+          label(for="editformpass") Password:
+          input#editformpass(type="password" name="editformpass" required="true")
       button(type="submit") Save
 
   if(yarninstances.length > 0)
@@ -24,6 +28,7 @@ block content
     ul
       each yarninstance in yarninstances
         li
+          i.las.la-caret-right
           a(href=yarninstance.url) Colorway: #{yarninstance.colorwayid}
           |
           | , Dyelot: #{yarninstance.dyelot}, Stock: #{yarninstance.stock}

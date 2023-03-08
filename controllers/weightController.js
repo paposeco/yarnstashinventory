@@ -55,7 +55,7 @@ exports.weight_detail = (req, res, next) => {
         return next(err);
       }
       res.render("weight_detail", {
-        title: "Weight: ",
+        title: "Weight: " + results.findweight.weight,
         weight_info: results.findweight,
         yarninfo: results.findyarn,
       });
@@ -87,7 +87,7 @@ exports.weight_create_get = (req, res, next) => {
     }
 
     res.render("weight_create", {
-      title: "Create Weight",
+      title: "Add Weight",
       weightstocreate: missingweights,
     });
   });
@@ -101,7 +101,7 @@ exports.weight_create_post = [
 
     if (!errors.isEmpty()) {
       res.render("weight_create", {
-        title: "Create Weight",
+        title: "Add Weight",
         errorspresent: errors,
       });
       return;
@@ -145,7 +145,7 @@ exports.weight_delete_get = (req, res, next) => {
         return;
       }
       res.render("weight_delete", {
-        title: "Delete: ",
+        title: "Delete: " + results.findweight.weight,
         weight: results.findweight,
         yarn: results.findyarn,
       });
@@ -169,7 +169,7 @@ exports.weight_delete_post = (req, res, next) => {
       }
       if (results.weightexists.length > 0) {
         res.render("weight_delete", {
-          title: "Delete: ",
+          title: "Delete: " + results.findweight.weight,
           weight: results.weightexists,
           yarn: results.yarnwiththisweight,
         });

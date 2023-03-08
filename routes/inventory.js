@@ -4,7 +4,6 @@ var router = express.Router();
 const multer = require("multer");
 
 // put it storage on host
-const storage = multer.memoryStorage();
 const upload = multer({ dest: "public/images/uploads/" });
 
 const yarn_controller = require("../controllers/yarnController");

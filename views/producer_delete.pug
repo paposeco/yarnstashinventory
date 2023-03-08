@@ -1,13 +1,14 @@
 extends layout
 
 block content
-  h1 #{title} #{producer.brandname}
+  h1= title
 
   if(yarnlist.length > 0)
     p Before deleting this producer, you need to delete the following yarn:
     ul
       each yarn in yarnlist
         li
+          i.las.la-caret-right
           a(href=yarn.url) #{producer.brandname}
           |
           |#{yarn.name}

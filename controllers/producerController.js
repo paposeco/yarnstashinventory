@@ -54,7 +54,7 @@ exports.producer_delete_get = (req, res, next) => {
         return next(err);
       }
       res.render("producer_delete", {
-        title: "Delete: ",
+        title: "Delete: " + results.findproducer.brandname,
         producer: results.findproducer,
         yarnlist: results.lookforyarn,
       });
@@ -78,7 +78,7 @@ exports.producer_delete_post = (req, res, next) => {
       }
       if (results.lookforyarn.length > 0) {
         res.render("producer_delete", {
-          title: "Delete: ",
+          title: "Delete: " + results.findproducer.brandname,
           producer: results.findproducer,
           yarnlist: results.lookforyarn,
         });
