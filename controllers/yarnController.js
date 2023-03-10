@@ -368,6 +368,12 @@ exports.yarn_create_post = [
   (req, res, next) => {
     const errors = validationResult(req);
 
+    let filePath = "";
+
+    if (req.file) {
+      filePath = req.file.path.substring(6);
+    }
+
     const yarn = new Yarn({
       name: req.body.yarnname,
       weight: req.body.weight,
@@ -376,7 +382,7 @@ exports.yarn_create_post = [
       meterage: req.body.meterage,
       price: req.body.price,
       producer: req.body.producer,
-      imagepath: req.file.path,
+      imagepath: filePath,
     });
     // this stays so that I trust my gut in the future
     /* findfibers(callback) {
@@ -539,7 +545,7 @@ exports.yarn_update_post = [
     let filePath = "";
 
     if (req.file) {
-      filePath = req.file.path;
+      filePath = req.file.path.substring(6);
     }
     //in order to change the image, the user must delete the old one first
 
@@ -588,6 +594,7 @@ exports.yarn_update_post = [
       );
       return;
     }
+
     Yarn.findByIdAndUpdate(req.params.id, yarn, {}, (err, theyarn) => {
       if (err) {
         return next(err);
