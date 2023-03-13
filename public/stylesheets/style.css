@@ -804,6 +804,10 @@ button[type="submit"]:hover, .editupdlink:hover {
   margin-bottom: 1rem;
 }
 
+.mb-8 {
+  margin-bottom: 2rem;
+}
+
 .ml-16 {
   margin-left: 4rem;
 }
@@ -812,28 +816,12 @@ button[type="submit"]:hover, .editupdlink:hover {
   margin-top: 4rem;
 }
 
-.mt-8 {
-  margin-top: 2rem;
-}
-
-.mb-2 {
-  margin-bottom: 0.5rem;
-}
-
-.mt-2 {
-  margin-top: 0.5rem;
-}
-
 .mt-4 {
   margin-top: 1rem;
 }
 
-.mb-6 {
-  margin-bottom: 1.5rem;
-}
-
-.mb-8 {
-  margin-bottom: 2rem;
+.mt-8 {
+  margin-top: 2rem;
 }
 
 .block {
@@ -846,10 +834,6 @@ button[type="submit"]:hover, .editupdlink:hover {
 
 .hidden {
   display: none;
-}
-
-.min-h-full {
-  min-height: 100%;
 }
 
 .min-h-screen {

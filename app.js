@@ -31,6 +31,7 @@ app.set("view engine", "pug");
 
 app.use(compression());
 app.use(helmet());
+
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
