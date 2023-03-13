@@ -162,6 +162,7 @@ exports.create_instance_post = [
         },
         checkfordyelot(callback) {
           YarnInstance.find({
+            yarn: req.params.yarnid,
             colorwayid: req.body.colorway,
             dyelot: req.body.dyelot,
           }).exec(callback);
@@ -187,9 +188,9 @@ exports.create_instance_post = [
           return next(err);
         }
         if (results.findyarninfo === null) {
-          res.redirect("/inventory/yarn");
+          res.redirect("/inventory");
         }
-        if (results.checkfordyelot !== null) {
+        if (results.checkfordyelot.length > 0) {
           res.render("yarn_instance_create", {
             title: "Add new colorway or dyelot",
             curryarninstance: req.body,
@@ -217,35 +218,150 @@ exports.create_instance_post = [
   },
 ];
 
-exports.update_get = (req, res, next) => {
-  async.parallel(
-    {
-      // if I only the yarn information on the instance, I won't have access to the producer info
-      findyarninstances(callback) {
-        YarnInstance.find({ yarn: req.params.yarnid }, null, {
-          sort: { colorwayid: 1 },
-        }).exec(callback);
+exports.create_instance_yarnselector_get = (req, res, next) => {
+  Yarn.find({})
+    .populate("producer")
+    .sort({ producer: 1 })
+    .exec((err, results) => {
+      if (err) {
+        return next(err);
+      }
+      res.render("yarn_instance_create_select", {
+        yarnavailable: results,
+      });
+    });
+};
+
+exports.create_instance_yarnselector_post = [
+  body("selectyarn")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("Yarn must be selected"),
+  body("dyelot")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("Dyelot is required.")
+    .isAlphanumeric()
+    .withMessage("Dyelot must be letters and/or numbers."),
+  body("colorway")
+    .trim()
+    .isLength({ min: 1 })
+    .withMessage("Colorway id is required")
+    .isAlphanumeric()
+    .withMessage("Colorway id must be letters and/or numbers."),
+  body("stock")
+    .trim()
+    .isLength({ min: 1, max: 3 })
+    .escape()
+    .withMessage("Stock is required")
+    .isNumeric({ no_symbols: true })
+    .withMessage("Only integers are allowed"),
+
+  (req, res, next) => {
+    const errors = validationResult(req);
+    async.parallel(
+      {
+        findcurryarn(callback) {
+          Yarn.findById(req.body.selectyarn).exec(callback);
+        },
+        checkfordyelot(callback) {
+          YarnInstance.find({
+            yarn: req.body.selectyarn,
+            colorwayid: req.body.colorway,
+            dyelot: req.body.dyelot,
+          }).exec(callback);
+        },
+        findyarn(callback) {
+          Yarn.find({})
+            .populate("producer")
+            .sort({ producer: 1 })
+            .exec(callback);
+        },
       },
-      yarninstance(callback) {
+      (err, results) => {
+        if (!errors.isEmpty()) {
+          res.render("yarn_instance_create_select", {
+            yarnavailable: results.findyarn,
+            errors: errors.array(),
+          });
+          return;
+        }
+        if (err) {
+          return next(err);
+        }
+
+        if (results.findcurryarn === null) {
+          res.redirect("/inventory");
+        }
+        if (results.checkfordyelot.length > 0) {
+          res.render("yarn_instance_create_select", {
+            title: "Add new colorway or dyelot",
+            curryarninstance: req.body,
+            yarnavailable: results.findyarn,
+            errors:
+              "Error: Dyelot for this colorway already exists. Update stock on that dyelot instead",
+          });
+          return;
+        }
+        const newyarninstance = new YarnInstance({
+          yarn: req.body.selectyarn,
+          dyelot: req.body.dyelot,
+          colorwayid: req.body.colorway,
+          stock: req.body.stock,
+        });
+        newyarninstance.save((error) => {
+          if (error) {
+            return next(error);
+          }
+          res.redirect(newyarninstance.url);
+        });
+      }
+    );
+  },
+];
+
+// selected option on error
+
+exports.update_get = (req, res, next) => {
+  async.waterfall(
+    [
+      function(callback) {
         YarnInstance.findById(req.params.yarnid)
           .populate({ path: "yarn", populate: { path: "producer" } })
-          .exec(callback);
+          .exec((err, yarninstance) => {
+            if (err) {
+              return next(err);
+            }
+            callback(null, yarninstance);
+          });
       },
-    },
+      function(yarninstance, callback) {
+        YarnInstance.find({ yarn: yarninstance.yarn }, null, {
+          sort: { colorwayid: 1 },
+        }).exec((err, yarninstancecollection) => {
+          if (err) {
+            return next(err);
+          }
+          callback(null, [yarninstance, yarninstancecollection]);
+        });
+      },
+    ],
     (err, results) => {
       if (err) {
         return next(err);
       }
-      if (results.yarninstance === null) {
+      if (results[0] === null) {
         const err = new Error("Yarn colorway or dyelot not found");
         err.status = 404;
         return next(err);
       }
       res.render("yarn_instance_create", {
-        title: "Edit yarn colorway or dyelot",
-        yarninfo: results.yarninstance.yarn,
-        yarninstances: results.findyarninstances,
-        curryarninstance: results.yarninstance,
+        title: "Edit yarn colorway/dyelot",
+        yarninfo: results[0].yarn,
+        yarninstances: results[1],
+        curryarninstance: results[0],
       });
     }
   );

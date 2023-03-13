@@ -98,7 +98,7 @@ exports.index = (req, res) => {
         }
       }
       res.render("index", {
-        title: "Yarn Inventory",
+        title: "Current Inventory",
         error: err,
         producers: producermap,
         yarndic: yarnmap,
@@ -165,7 +165,7 @@ exports.yarn_delete_get = (req, res, next) => {
         return next(err);
       }
       if (results.findyarn === null) {
-        res.redirect("/inventory/null");
+        res.redirect("/inventory");
       }
       res.render("yarn_delete", {
         title:
@@ -249,15 +249,11 @@ exports.yarn_delete_post = [
           results.findyarn.imagepath !== "" &&
           results.findyarn.imagepath !== undefined
         ) {
-          const imagepath = yarn.imagepath;
+          const imagepath = results.findyarn.imagepath;
           // delete image from folder on host
           // look for extension
-          const imagepathonhost = imagepath.substring(
-            0,
-            imagepath.indexOf(".", 35)
-          );
-
-          fs.unlink(imagepathonhost, (err) => {
+          const pathonhost = "../public" + imagepath;
+          fs.unlink(path.join(__dirname, pathonhost), (err) => {
             if (err) throw err;
           });
         }
@@ -265,7 +261,7 @@ exports.yarn_delete_post = [
           if (err) {
             return next(err);
           }
-          res.redirect("/inventory/yarn");
+          res.redirect("/inventory");
         });
       }
     );

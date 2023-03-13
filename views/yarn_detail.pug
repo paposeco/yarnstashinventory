@@ -6,23 +6,28 @@ block content
 
   h2 #{yarn_info.producer.brandname} #{yarn_info.name}
 
-  div.descriptiondiv
+  div.descriptiondiv.flex.flex-row.gap-20.justify-start
+
+    div.mt-8.mb-4
+      - var composition = "";
+        each val, index in yarn_info.fibercomposition
+          - composition += val.percentage +"% "+ val.fibertype.fibertype
+          if(index < yarn_info.fibercomposition.length - 1)
+            - composition += ", "
+          else
+            - composition += " "
+      p Composition: #{composition}
+      p Weight: #{yarn_info.weight.weight}
+      p Unit weight: #{yarn_info.unitweight}g
+      p Meterage: #{yarn_info.meterage}m
+      if yarn_info.price
+        p Unit price: #{yarn_info.price} eur
+
     div.yarnimage
       if(yarn_info.imagepath !== "" && yarn_info.imagepath !== undefined)
-        img.w-fit(src=yarn_info.imagepath alt="yarnimage" class="yarnimage")
+        img.w-fit.max-w-md(src=yarn_info.imagepath alt="yarnimage" class="yarnimage")
         a.editupdlink(href=yarn_info.url+"/deleteimage") Delete image
 
-    p Weight: #{yarn_info.weight.weight}
-
-    - var composition = "";
-        each composition_detail in yarn_info.fibercomposition
-          - composition += composition_detail.percentage +"% "+ composition_detail.fibertype.fibertype + " "
-
-    p Composition: #{composition}
-    p Unit weight: #{yarn_info.unitweight}g
-    p Meterage: #{yarn_info.meterage}m
-    if yarn_info.price
-      p Unit price: #{yarn_info.price} eur
 
   div.editlinksdiv
        a.editupdlink(href='/inventory/yarncolorway/create/'+yarn_info._id) Add new colorway/dyelot

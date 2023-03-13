@@ -22,7 +22,7 @@
         @apply pl-1;
     }
     a{
-        @apply text-cyan-500 hover:text-cyan-700;
+        @apply hover:text-cyan-700;
     }
     form{
         @apply flex flex-col gap-2 w-1/2 min-w-min mb-3;
@@ -51,11 +51,15 @@
     .yarnimage{
         @apply mt-4 mb-4;
     }
+    .las.la-caret-right{
+        @apply text-orange-400;
+    }
 
 }
 
-body {
-  padding: 75px;
+.bodycontent {
+    /* padding: 75px; */
+    /* padding-left: 75px; */
   display: grid;
   grid-template-columns: 2fr 8fr 2fr;
 }
@@ -63,3 +67,4 @@ body {
 a {
   color: #00B7FF;
 }
+

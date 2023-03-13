@@ -35,6 +35,14 @@ router.post(
   "/yarncolorway/create/:yarnid",
   yarn_instance_controller.create_instance_post
 );
+router.get(
+  "/yarncolorway/create",
+  yarn_instance_controller.create_instance_yarnselector_get
+);
+router.post(
+  "/yarncolorway/create",
+  yarn_instance_controller.create_instance_yarnselector_post
+);
 router.get("/yarn/create/:numberfibers", yarn_controller.yarn_create_get);
 router.post(
   "/yarn/create/:numberfibers",

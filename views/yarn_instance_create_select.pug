@@ -1,13 +1,20 @@
 extends layout
 
 block content
-  h1 Yarn: #{yarninfo.producer.brandname} #{yarninfo.name}
-  h2= title
+  h1 Add colorway or dyelot
 
   if(errors)
     p= errors
 
   form(method="POST" action="")
+    div.inputdiv
+      label(for="selectyarn") Yarn:
+      select#selectyarn(required="true" name="selectyarn")
+        each yarn in yarnavailable
+          if(curryarninstance === undefined)
+            option(value=yarn._id) #{yarn.producer.brandname} #{yarn.name}
+          else
+            option(value=yarn._id selected=(yarn._id.toString() === curryarninstance.selectyarn.toString() ? "selected" : false)) #{yarn.producer.brandname} #{yarn.name}
     div.inputdiv
       label(for="dyelot") Dyelot:
       input#dyelot(type="text" name="dyelot" required="true" value=(undefined===curryarninstance ? "" : curryarninstance.dyelot))
@@ -21,16 +28,6 @@ block content
       div.inputdiv
         label(for="editformpass") Password:
         input#editformpass(type="password" name="editformpass" required="true")
-
     button(type="submit") Save
 
-  if(yarninstances.length > 0)
-    p Available colorways and dyelots for this yarn:
-    ul
-      each yarninstance in yarninstances
-        li
-          i.las.la-caret-right
-          a(href=yarninstance.url) Colorway: #{yarninstance.colorwayid}
-          |, Dyelot: #{yarninstance.dyelot}, Stock: #{yarninstance.stock}
-  else
-    p There are currently no available colorways for this yarn.
+

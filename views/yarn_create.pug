@@ -52,13 +52,12 @@ block content
       if(!photo)
         label(for='yarnphoto') Upload photo
         input#photo(type="file" name="yarnphoto")
-        if(yarn !== undefined)
-          label(for="editformpass") Password:
-          input#editformpass(type="password" name="editformpass" required="true")
+    if(yarn !== undefined)
+      div.inputdiv
+        label(for="editformpass") Password:
+        input#editformpass(type="password" name="editformpass" required="true")
     button(type="submit") Save
 
   if(photo)
-    div#photoplace
-      img(src=yarn.imagepath alt="yarnimage")
-
-      a(href=yarn.url+"/deleteimage") Delete image
+    div.yarnimage
+      img.w-fit.max-w-md(src=yarn.imagepath alt="yarnimage")

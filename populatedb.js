@@ -90,7 +90,8 @@ function yarnCreate(
     fibercomposition: fibercomposition,
     unitweight: unitweight,
     meterage: meterage,
-    producer: producer,
+      producer: producer,
+      imagepath: "",
   };
   if (price !== false) yarndetail.price = price;
 
