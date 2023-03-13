@@ -227,6 +227,7 @@ exports.create_instance_yarnselector_get = (req, res, next) => {
         return next(err);
       }
       res.render("yarn_instance_create_select", {
+        title: "Add colorway or dyelot",
         yarnavailable: results,
       });
     });
@@ -297,7 +298,7 @@ exports.create_instance_yarnselector_post = [
         }
         if (results.checkfordyelot.length > 0) {
           res.render("yarn_instance_create_select", {
-            title: "Add new colorway or dyelot",
+            title: "Add colorway or dyelot",
             curryarninstance: req.body,
             yarnavailable: results.findyarn,
             errors:
