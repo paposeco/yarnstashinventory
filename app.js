@@ -9,6 +9,9 @@ var usersRouter = require("./routes/users");
 const inventoryRouter = require("./routes/inventory");
 require("dotenv").config();
 
+const compression = require("compression");
+const helmet = require("helmet");
+
 var app = express();
 
 // db connection
@@ -26,6 +29,8 @@ async function main() {
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
+app.use(compression());
+app.use(helmet());
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
